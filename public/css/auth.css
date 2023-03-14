@@ -1,0 +1,20 @@
+body{
+    background-color: rgb(161, 161, 253);
+}
+
+.middle-title{
+    text-align: center;
+}
+
+.auth-background{
+    width: 26.875em;
+    height: 34.125em;
+    filter: blur(0.5px);
+    -webkit-filter: blur(0.5px);
+}
+    
+@media (min-width: 768px) {
+    .gradient-form {
+        height: 100vh !important;
+    }
+}
