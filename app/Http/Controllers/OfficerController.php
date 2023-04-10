@@ -5,26 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Officer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 
 class OfficerController extends Controller
 {
     public function index(){
-        return view();
+        $officer = Officer::paginate(10);
+        return view('Officer.index', ['officer' => $officer]);
     }
 
     public function create(){
-        return view('Admin.Officer.insert');
+        return view('Officer.insert');
     }
 
     public function store(Request $request){
         $officer = $request->validate([
             'name' => 'required|string',
-            'nik' => 'required',
+            'nik' => 'required|numeric',
             'dob' => 'required',
             'gender' => 'required|string',
             'address' => 'required|string',
-            'phone' => 'required',
+            'phone' => 'required|numeric',
             'position' => 'required|string',
         ]);
         
@@ -51,12 +53,14 @@ class OfficerController extends Controller
             'position' => $officer['position'],
             'user_id' => $newUser->id,
         ]);
+
+        return redirect()->route('officerDashboard');
     }
 
     public function edit($id){
         $officer = Officer::select('*')->where('id', $id)->first();
         $user = User::select('*')->where('id', $officer->user_id)->first();
-        return view('Admin.Officer.edit', [ 'officer' => $officer, 'user' => $user ]);
+        return view('Officer.edit', [ 'officer' => $officer, 'user' => $user ]);
     }
 
     public function update(Request $request, $id){
@@ -91,11 +95,15 @@ class OfficerController extends Controller
             'password' => Hash::make($user['password']),
             'status' => $officer['position'],
         ]);
+
+        return redirect()->route('officerDashboard');
     }
 
     public function delete($id){
         $officer = Officer::select('user_id')->where('id', $id)->first();
-        Officer::where('id', $id)->delete();
         User::where('id', $officer->user_id)->delete();
+        Officer::where('id', $id)->delete();
+
+        return redirect()->route('officerDashboard');
     }
 }

@@ -8,11 +8,13 @@ use Illuminate\Http\Request;
 class WarehouseController extends Controller
 {
     public function index(){
-        return view();
+        $warehouse = Warehouse::paginate(10);
+
+        return view('Gudang.index', ['warehouse' => $warehouse]);
     }
 
     public function create(){
-        return view('Admin.Warehouse.insert');
+        return view('Gudang.insert');
     }
 
     public function store(Request $request){
@@ -22,21 +24,39 @@ class WarehouseController extends Controller
         ]);
 
         Warehouse::create([
-            'warehouse_code' => $request->warehouse_code,
+            'warehouse_code' => "GEPU-" . $request->warehouse_code,
             'name' => $request->name,
             'information' => $request->information
         ]);
+
+        return redirect()->route('dashboardWarehouse');
     }
 
-    public function edit(){
-        return view('Admin.Warehouse.edit');
+    public function edit($id){
+        $warehouse = Warehouse::select('*')->where('id', $id)->first();
+
+        return view('Gudang.edit', ['warehouse' => $warehouse]);
     }
 
-    public function update(){
+    public function update(Request $request, $id){
+        $request->validate([
+            'warehouse_code' => 'required',
+            'name' => 'required',
+            'information' => ''
+        ]);
 
+        Warehouse::where('id', $id)->update([
+            'warehouse_code' => "GEPU-" . $request->warehouse_code,
+            'name' => $request->name,
+            'information' => $request->information
+        ]);
+
+        return redirect()->route('dashboardWarehouse');
     }
 
-    public function delete(){
+    public function delete($id){
+        Warehouse::where('id', $id)->delete();
 
+        return redirect()->route('dashboardWarehouse');
     }
 }
