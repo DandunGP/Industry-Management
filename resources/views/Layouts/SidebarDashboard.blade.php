@@ -26,7 +26,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="{{route('incomingDashboard')}}">
         <i class="ti-archive menu-icon"></i>
         <span class="menu-title">Incoming Goods</span>
       </a>
@@ -38,7 +38,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="{{ route('supplyDashboard') }}">
         <i class="ti-dropbox menu-icon"></i>
         <span class="menu-title">Supply</span>
       </a>
@@ -56,7 +56,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="{{route('productDashboard')}}">
         <i class="ti-harddrives menu-icon"></i>
         <span class="menu-title">Product</span>
       </a>

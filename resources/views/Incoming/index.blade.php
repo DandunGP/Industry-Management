@@ -16,7 +16,7 @@
       <div class="col-md-12 grid-margin">
         <div class="row">
           <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-            <h3 class="font-weight-bold">Pegawai</h3>
+            <h3 class="font-weight-bold">Barang Masuk</h3>
           </div>
           <div class="col-12 col-xl-4">
             <div class="justify-content-end d-flex">
@@ -35,8 +35,8 @@
         <div class="card p-4">
           <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-              <a href="{{route('addOfficer')}}" class="btn btn-primary btn-sm mb-3 font-weight-bold my-auto"><i class="ti-plus mr-2"></i>Tambah Pegawai</a>
-              <form action="{{route('searchOfficer')}}" method="post">
+              <a href="{{route('addIncoming')}}" class="btn btn-primary btn-sm mb-3 font-weight-bold my-auto"><i class="ti-plus mr-2"></i>Tambah Barang Masuk</a>
+              <form action="{{route('searchIncoming')}}" method="post">
                 @csrf
                 <input type="text" name="keyword" class="form-control" placeholder="Search" aria-label="Search...">
               </form>
@@ -68,34 +68,40 @@
                 <thead>
                   <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Tanggal Lahir</th>
-                    <th scope="col">Jenis Kelamin</th>
+                    <th scope="col">No BPB</th>
+                    <th scope="col">No PO</th>
+                    <th scope="col">Tanggal PO</th>
+                    <th scope="col">Tanggal Penerimaan</th>
+                    <th scope="col">Supplier</th>
                     <th scope="col">Alamat</th>
-                    <th scope="col">No Hp</th>
-                    <th scope="col">Jabatan</th>
+                    <th scope="col">No SJ Supplier</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Informasi</th>
                     <th scope="col">Keterangan</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @if ($officer[0] == null)
+                  @if ($incoming[0] == null)
                     <tr>
-                      <td colspan="8" class="text-center">Tidak ada data pegawai</td>
+                      <td colspan="11" class="text-center">Tidak ada data barang masuk</td>
                     </tr>
                   @else
-                    @foreach ($officer as $of)
+                    @foreach ($incoming as $inc)
                       <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $of->name }}</td>
-                        <td>{{ date("j F Y", strtotime($of->date_of_birth)) }}</td>
-                        <td>{{ $of->gender }}</td>
-                        <td>{{ $of->address }}</td>
-                        <td>{{ $of->phone }}</td>
-                        <td>{{ $of->position }}</td>
+                        <td>{{ $inc->no_bpb }}</td>
+                        <td>{{ $inc->no_po }}</td>
+                        <td>{{ date("j F Y", strtotime($inc->po_date)) }}</td>
+                        <td>{{ date("j F Y", strtotime($inc->date_of_receipt)) }}</td>
+                        <td>{{ $inc->supplier }}</td>
+                        <td>{{ $inc->address }}</td>
+                        <td>{{ $inc->no_sj_supplier }}</td>
+                        <td>{{ $inc->qty }}</td>
+                        <td>{{ $inc->information }}</td>
                         <td>
-                          <a href="/siswa/{{ $of->id }}" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
-                          <a href="{{route('editOfficer', $of->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a>
-                          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="handleDelete({{ $of->id }})"><i class="ti-trash"></i></button>
+                          <a href="/siswa/{{ $inc->id }}" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
+                          <a href="{{route('editIncoming', $inc->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a>
+                          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="handleDelete({{ $inc->id }})"><i class="ti-trash"></i></button>
                         </td>
                       </tr>
                     @endforeach
@@ -105,7 +111,7 @@
             </div>
             <div class="d-flex">
               <div class="mt-3 mx-auto">
-                {{ $officer->links() }}
+                {{ $incoming->links() }}
               </div>
             </div>
           </div>
@@ -141,7 +147,7 @@
 </div>
 <script>
   function handleDelete(id){
-    document.getElementById('formDelete').action = `officer/delete/${id}`
+    document.getElementById('formDelete').action = `incoming/delete/${id}`
   }
 </script>
 @endsection

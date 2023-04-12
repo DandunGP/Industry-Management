@@ -10,6 +10,7 @@ class Incoming extends Model
     use HasFactory;
 
     protected $fillable = [
+        'no_bpb',
         'no_po',
         'po_date',
         'date_of_receipt',

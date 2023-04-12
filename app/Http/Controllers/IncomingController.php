@@ -8,15 +8,18 @@ use Illuminate\Http\Request;
 class IncomingController extends Controller
 {
     public function index(){
-        return view();
+        $incoming = Incoming::paginate(25);
+
+        return view('Incoming.index', ['incoming' => $incoming]);
     }
 
     public function create(){
-        return view('Admin.Incoming.insert');
+        return view('Incoming.insert');
     }
 
     public function store(Request $request){
         $request->validate([
+            'no_bpb' => 'required|string',
             'no_po' => 'required|string' ,
             'po_date' => 'required' ,
             'date_of_receipt' => 'required',
@@ -28,6 +31,7 @@ class IncomingController extends Controller
         ]);
 
         Incoming::create([
+            'no_bpb' => $request->no_bpb,
             'no_po' => $request->no_po ,
             'po_date' => $request->po_date ,
             'date_of_receipt' => $request->date_of_receipt,
@@ -37,15 +41,18 @@ class IncomingController extends Controller
             'qty' => $request->qty,
             'information' => $request->information,
         ]);
+
+        return redirect()->route('incomingDashboard');
     }
 
     public function edit($id){
         $incoming = Incoming::select('*')->where('id', $id)->first();
-        return view('Admin.Incoming.edit', ['incoming' => $incoming]);
+        return view('Incoming.edit', ['incoming' => $incoming]);
     }
 
     public function update(Request $request, $id){
         $request->validate([
+            'no_bpb' => 'required|string',
             'no_po' => 'required|string' ,
             'po_date' => 'required' ,
             'date_of_receipt' => 'required',
@@ -57,6 +64,7 @@ class IncomingController extends Controller
         ]);
 
         Incoming::where('id', $id)->update([
+            'no_bpb' => $request->no_bpb,
             'no_po' => $request->no_po ,
             'po_date' => $request->po_date ,
             'date_of_receipt' => $request->date_of_receipt,
@@ -66,9 +74,13 @@ class IncomingController extends Controller
             'qty' => $request->qty,
             'information' => $request->information,
         ]);
+
+        return redirect()->route('incomingDashboard');
     }
 
     public function delete($id){
         Incoming::where('id', $id)->delete();
+
+        return redirect()->route('incomingDashboard');
     }
 }

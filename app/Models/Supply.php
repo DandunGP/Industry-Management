@@ -13,6 +13,7 @@ class Supply extends Model
         'supply_code',
         'name',
         'type',
+        'memo',
         'category',
         'merk',
         'part_number',

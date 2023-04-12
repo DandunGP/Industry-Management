@@ -75,9 +75,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @if ($warehouse == null)
+                  @if ($warehouse[0] == null)
                     <tr>
-                      <td colspan="7" class="text-center">Tidak ada data pegawai</td>
+                      <td colspan="5" class="text-center">Tidak ada data gudang</td>
                     </tr>
                   @else
                     @foreach ($warehouse as $wh)

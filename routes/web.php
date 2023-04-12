@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BillController;
+use App\Http\Controllers\IncomingController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OfficerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WorkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,9 +77,65 @@ Route::prefix('warehouse')->group(function () {
 
 // Product CRUD
 Route::prefix('product')->group(function () {
-    Route::get('/add-product', [ProductController::class, 'create'])->middleware('checkAdmin');
+    Route::get('/', [ProductController::class, 'index'])->name('productDashboard');
+    Route::get('/add-product', [ProductController::class, 'create'])->name('addProduct')->middleware('checkAdmin');
     Route::post('/add-product/store', [ProductController::class, 'store'])->name('storeProduct')->middleware('checkAdmin');
     Route::get('/edit-product/{id}', [ProductController::class, 'edit'])->name('editProduct')->middleware('checkAdmin');
     Route::post('/edit-product/{id}/update', [ProductController::class, 'update'])->name('updateProduct')->middleware('checkAdmin');
     Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('deleteProduct')->middleware('checkAdmin');
+
+    // Search Feature
+    Route::post('/search', [SearchController::class, 'searchProduct'])->name('searchProduct');
+});
+
+// Incoming Goods CRUD
+Route::prefix('incoming')->group(function () {
+    Route::get('/', [IncomingController::class, 'index'])->name('incomingDashboard');
+    Route::get('/add-incoming', [IncomingController::class, 'create'])->name('addIncoming')->middleware('checkAdmin');
+    Route::post('/add-incoming/store', [IncomingController::class, 'store'])->name('storeIncoming')->middleware('checkAdmin');
+    Route::get('/edit-incoming/{id}', [IncomingController::class, 'edit'])->name('editIncoming')->middleware('checkAdmin');
+    Route::post('/edit-incoming/{id}/update', [IncomingController::class, 'update'])->name('updateIncoming')->middleware('checkAdmin');
+    Route::delete('/delete/{id}', [IncomingController::class, 'delete'])->name('deleteIncoming')->middleware('checkAdmin');
+
+    // Search Feature
+    Route::post('/search', [SearchController::class, 'searchIncoming'])->name('searchIncoming');
+});
+
+// Supply CRUD
+Route::prefix('supply')->group(function () {
+    Route::get('/', [SupplyController::class, 'index'])->name('supplyDashboard');
+    Route::get('/add-supply', [SupplyController::class, 'create'])->name('addSupply')->middleware('checkAdmin');
+    Route::post('/add-supply/store', [SupplyController::class, 'store'])->name('storeSupply')->middleware('checkAdmin');
+    Route::get('/edit-supply/{id}', [SupplyController::class, 'edit'])->name('editSupply')->middleware('checkAdmin');
+    Route::post('/edit-supply/{id}/update', [SupplyController::class, 'update'])->name('updateSupply')->middleware('checkAdmin');
+    Route::delete('/delete/{id}', [SupplyController::class, 'delete'])->name('deleteSupply')->middleware('checkAdmin');
+
+    // Search Feature
+    Route::post('/search', [SearchController::class, 'searchSupply'])->name('searchSupply');
+});
+
+// Bill Of Materials CRUD
+Route::prefix('bill-of-materials')->group(function () {
+    Route::get('/', [BillController::class, 'index'])->name('billDashboard');
+    Route::get('/add-bill-of-materials', [BillController::class, 'create'])->name('addBill')->middleware('checkAdmin');
+    Route::post('/add-bill-of-materials/store', [BillController::class, 'store'])->name('storeBill')->middleware('checkAdmin');
+    Route::get('/edit-bill-of-materials/{id}', [BillController::class, 'edit'])->name('editBill')->middleware('checkAdmin');
+    Route::post('/edit-bill-of-materials/{id}/update', [BillController::class, 'update'])->name('updateBill')->middleware('checkAdmin');
+    Route::delete('/delete/{id}', [BillController::class, 'delete'])->name('deleteBill')->middleware('checkAdmin');
+
+    // Search Feature
+    Route::post('/search', [SearchController::class, 'searchBill'])->name('searchBill');
+});
+
+// Work Order CRUD
+Route::prefix('work-order')->group(function () {
+    Route::get('/', [WorkController::class, 'index'])->name('workDashboard');
+    Route::get('/add-work-order', [WorkController::class, 'create'])->name('addWork')->middleware('checkAdmin');
+    Route::post('/add-work-order/store', [WorkController::class, 'store'])->name('storeWork')->middleware('checkAdmin');
+    Route::get('/edit-work-order/{id}', [WorkController::class, 'edit'])->name('editWork')->middleware('checkAdmin');
+    Route::post('/edit-work-order/{id}/update', [WorkController::class, 'update'])->name('updateWork')->middleware('checkAdmin');
+    Route::delete('/delete/{id}', [WorkController::class, 'delete'])->name('deleteWork')->middleware('checkAdmin');
+
+    // Search Feature
+    Route::post('/search', [SearchController::class, 'searchWork'])->name('searchWork');
 });

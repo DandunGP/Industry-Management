@@ -69,12 +69,13 @@
                     <th scope="col">No</th>
                     <th scope="col">Username</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Keterangan</th>
                   </tr>
                 </thead>
                 <tbody>
                   @if ($user == null)
                     <tr>
-                      <td colspan="7" class="text-center">Tidak ada data pegawai</td>
+                      <td colspan="4" class="text-center">Tidak ada data pegawai</td>
                     </tr>
                   @else
                     @foreach ($user as $us)

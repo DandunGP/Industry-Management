@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Incoming;
 use App\Models\Officer;
+use App\Models\Product;
+use App\Models\Supply;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
@@ -35,5 +38,57 @@ class SearchController extends Controller
         }
         
         return view('Gudang.index', ['warehouse' => $data]);
+    }
+
+    public function searchProduct(Request $request){
+        if ($request->has('keyword')) {
+            $data = Product::where('product_code', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('product_name', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('qty', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = Product::paginate(25);
+        }
+        
+        return view('Product.index', ['product' => $data]);
+    }
+
+    public function searchIncoming(Request $request){
+        if ($request->has('keyword')) {
+            $data = Incoming::where('no_bpb', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('no_po', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('po_date', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('date_of_receipt', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('supplier', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('address', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('no_sj_supplier', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('qty', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('information', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = Incoming::paginate(25);
+        }
+
+        return view('Incoming.index', ['incoming' => $data]);
+    }
+
+    public function searchSupply(Request $request){
+        if ($request->has('keyword')) {
+            $data = Supply::where('supply_code', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('name', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('type', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('category', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('merk', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('memo', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('part_number', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('status', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('purchase_price', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('selling_price', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = Supply::paginate(25);
+        }
+
+        return view('Supply.index', ['supply' => $data]);
     }
 }

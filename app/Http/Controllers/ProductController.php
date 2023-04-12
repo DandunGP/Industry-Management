@@ -8,7 +8,9 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     public function index(){
-        return view();
+        $product = Product::paginate(25);
+
+        return view('Product.index', ['product' => $product]);
     }
 
     public function create(){
@@ -23,10 +25,12 @@ class ProductController extends Controller
         ]);
 
         Product::create([
-            'product_code' => $request->product_code,
+            'product_code' => "PEPU-" . $request->product_code,
             'product_name' => $request->product_name,
             'qty' => $request->qty,
         ]);
+
+        return redirect()->route('productDashboard');
     }
 
     public function edit($id){
@@ -42,13 +46,17 @@ class ProductController extends Controller
         ]);
 
         Product::where('id', $id)->update([
-            'product_code' => $request->product_code,
+            'product_code' => "PEPU-" . $request->product_code,
             'product_name' => $request->product_name,
             'qty' => $request->qty,
         ]);
+
+        return redirect()->route('productDashboard');
     }
 
     public function delete($id){
         Product::where('id', $id)->delete();
+        
+        return redirect()->route('productDashboard');
     }
 }
