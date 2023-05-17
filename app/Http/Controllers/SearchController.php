@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillOfMaterial;
 use App\Models\Incoming;
 use App\Models\Officer;
 use App\Models\Product;
@@ -90,5 +91,24 @@ class SearchController extends Controller
         }
 
         return view('Supply.index', ['supply' => $data]);
+    }
+
+    public function searchBill(Request $request){
+        if ($request->has('keyword')) {
+            $data = BillOfMaterial::where('no_bom', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('bom_code', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('name', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('information', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('supply_id', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('warehouse_id', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('type_product', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('qty', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('amount_cost', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = BillOfMaterial::paginate(25);
+        }
+
+        return view('BOM.index', ['bom' => $data]);
     }
 }

@@ -32,13 +32,14 @@ class OfficerController extends Controller
         
         $user = $request->validate([
             'username' => 'required|string',
-            'password' => 'required'
+            'password' => 'required',
+            'status' => 'required'
         ]);
 
         User::create([
             'username' => $user['username'],
             'password' => Hash::make($user['password']),
-            'status' => $officer['position']
+            'status' => $user['status']
         ]);
 
         $newUser = User::select('id')->where('username', '=', $user['username'])->first();
@@ -76,7 +77,8 @@ class OfficerController extends Controller
         
         $user = $request->validate([
             'username' => 'required|string',
-            'password' => 'required'
+            'password' => 'required',
+            'status' => 'required'
         ]);
 
         Officer::where('id', $id)->update([
@@ -93,7 +95,7 @@ class OfficerController extends Controller
         User::where('id', $officerData->user_id)->update([
             'username' => $user['username'],
             'password' => Hash::make($user['password']),
-            'status' => $officer['position'],
+            'status' => $user['status'],
         ]);
 
         return redirect()->route('officerDashboard');

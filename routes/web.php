@@ -11,6 +11,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WorkController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authentication'])->name('loginAuth')->middleware('guest');
 
-Route::get('/logout',[LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard')->middleware('checkAdmin');
 
@@ -39,7 +40,7 @@ Route::prefix('user')->group(function () {
         Route::get('/edit-user/{id}', [AdminController::class, 'editUserStaff'])->name('editUserStaff');
         Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserStaff'])->name('updateUserStaff');
     });
-   
+
     // Gudang
     Route::prefix('warehouse')->group(function () {
         Route::get('/', [AdminController::class, 'getUserWarehouse'])->middleware('checkAdmin')->name('warehouseDashboard');
@@ -138,4 +139,10 @@ Route::prefix('work-order')->group(function () {
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchWork'])->name('searchWork');
+});
+
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully.';
 });

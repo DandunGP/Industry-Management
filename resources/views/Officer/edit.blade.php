@@ -75,7 +75,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="position">Tanggal Lahir</label>
+                    <label for="position">Jabatan</label>
                     <select name="position" id="position" class="form-control">
                         <option value="Manager" @if($officer->position == 'Manager') selected @else @endif>Manager</option>
                         <option value="Staff" @if($officer->position == 'Staff') selected @else @endif>Staff</option>

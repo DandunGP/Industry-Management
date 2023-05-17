@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Warehouse;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,9 @@ class WorkController extends Controller
     }
 
     public function create(){
-        return view('Work.insert');
+        $warehouse = Warehouse::all();
+
+        return view('Work.insert', ['warehouse' => $warehouse]);
     }
 
     public function store(Request $request){
@@ -39,7 +42,7 @@ class WorkController extends Controller
             'plan_warehouse' => $request->plan_warehouse,
             'type' => $request->type,
             'qty_result' => $request->qty_result,
-            'amount_cost' => $request->amout_cost
+            'amount_cost' => $request->amount_cost
         ]);
 
         return redirect()->route('workDashboard');
@@ -47,8 +50,9 @@ class WorkController extends Controller
 
     public function edit($id){
         $work = WorkOrder::where('id', $id)->first();
+        $warehouse = Warehouse::all();
 
-        return view('Work.edit', ['work' => $work]);
+        return view('Work.edit', ['work' => $work, 'warehouse' => $warehouse]);
     }
 
     public function update(Request $request, $id){
@@ -73,7 +77,7 @@ class WorkController extends Controller
             'plan_warehouse' => $request->plan_warehouse,
             'type' => $request->type,
             'qty_result' => $request->qty_result,
-            'amount_cost' => $request->amout_cost
+            'amount_cost' => $request->amount_cost
         ]);
 
         return redirect()->route('workDashboard');

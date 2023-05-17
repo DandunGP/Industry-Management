@@ -3,21 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\BillOfMaterial;
+use App\Models\Supply;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class BillController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $bill = BillOfMaterial::paginate(25);
 
         return view('BOM.index', ['bom' => $bill]);
     }
 
-    public function create(){
-        return view('BOM.insert');
+    public function create()
+    {
+        $supply = Supply::all();
+        $warehouse = Warehouse::all();
+        
+        return view('BOM.insert', ['supply' => $supply, 'warehouse' => $warehouse]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'no_bom' => 'required',
             'bom_code' => 'required',
@@ -45,13 +53,17 @@ class BillController extends Controller
         return redirect()->route('billDashboard');
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $bill = BillOfMaterial::where('id', $id)->first();
+        $supply = Supply::all();
+        $warehouse = Warehouse::all();
 
-        return view('BOM.edit', ['bom' => $bill]);
+        return view('BOM.edit', ['bom' => $bill, 'supply' => $supply, 'warehouse' => $warehouse]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'no_bom' => 'required',
             'bom_code' => 'required',
@@ -79,7 +91,8 @@ class BillController extends Controller
         return redirect()->route('billDashboard');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         BillOfMaterial::where('id', $id)->delete();
 
         return redirect()->route('billDashboard');

@@ -20,4 +20,14 @@ class WorkOrder extends Model
         'qty_result',
         'amount_cost',
     ];
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+
+    public function planWarehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'plan_warehouse');
+    }
 }

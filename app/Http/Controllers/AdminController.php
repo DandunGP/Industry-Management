@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Officer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -9,7 +10,14 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function index(){
-        return view('dashboard');
+        $countUser = User::where('status', 'Staff')->whereOr('status', 'Gudang')->count();
+        $countOfficer = Officer::count();
+
+        // $income = Sale::where
+
+        // $outcome = 
+
+        return view('dashboard', ['countUser' => $countUser, 'countOfficer' =>  $countOfficer]);
     }
 
     public function getUserStaff(){

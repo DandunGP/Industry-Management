@@ -20,4 +20,14 @@ class BillOfMaterial extends Model
         'qty',
         'amount_cost',
     ];
+
+    public function supply()
+    {
+        return $this->belongsTo(Supply::class);
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
 }

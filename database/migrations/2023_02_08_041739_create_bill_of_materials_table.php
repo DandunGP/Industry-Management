@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string("bom_code");
             $table->string("name");
             $table->string("information");
-            $table->string("supply_id");
             $table->foreignIdFor(Warehouse::class);
             $table->string("type_product");
             $table->integer("qty");
