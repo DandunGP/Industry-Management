@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillOfMaterial;
+use App\Models\Incoming;
 use App\Models\Officer;
+use App\Models\Supply;
 use App\Models\User;
+use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function index(){
-        $countUser = User::where('status', 'Staff')->whereOr('status', 'Gudang')->count();
+        $countUser = User::where('status', '!=','Staff')->count();
         $countOfficer = Officer::count();
+        $countSupply = Supply::count();
+        $countIncomings = Incoming::count();
+        $countBOM = BillOfMaterial::count();
+        $countWO = WorkOrder::count();
 
-        // $income = Sale::where
-
-        // $outcome = 
-
-        return view('dashboard', ['countUser' => $countUser, 'countOfficer' =>  $countOfficer]);
+        return view('dashboard', compact('countUser','countOfficer','countIncomings','countBOM','countWO','countSupply'));
     }
 
     public function getUserStaff(){

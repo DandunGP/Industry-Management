@@ -25,7 +25,7 @@
             <div class="col-md-12 grid-margin">
             <div class="card p-4">
                 <div class="card-body">
-                <form  action="{{route('storeOfficer')}}" method="POST">
+                <form  action="{{route('storeOfficer')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                     <label for="name">Nama Lengkap</label>
@@ -81,6 +81,10 @@
                         <option value="Staff">Staff</option>
                         <option value="Gudang">Gudang</option>
                     </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="officer_picture">Foto</label>
+                        <input type="file" name="officer_picture" class="form-control">
                     </div>
                     <div class="form-group">
                     <label for="username">Username</label>

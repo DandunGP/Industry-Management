@@ -73,10 +73,12 @@
                                             <label for="warehouse_id">Gudang</label>
                                             <select name="warehouse_id" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
-                                                    @if($wh->id == $work->warehouse_id)
-                                                        <option value="{{ $wh->id }}" selected>{{ $wh->warehouse_code }}</option>
+                                                    @if ($wh->id == $work->warehouse_id)
+                                                        <option value="{{ $wh->id }}" selected>
+                                                            {{ $wh->name }}</option>
                                                     @else
-                                                        <option value="{{ $wh->id }}">{{ $wh->warehouse_code }}</option>
+                                                        <option value="{{ $wh->id }}">{{ $wh->name }}
+                                                        </option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -85,10 +87,12 @@
                                             <label for="plan_warehouse">Gudang Rencana</label>
                                             <select name="plan_warehouse" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
-                                                    @if($wh->id == $work->plan_warehouse)
-                                                        <option value="{{ $wh->id }}" selected>{{ $wh->warehouse_code }}</option>
+                                                    @if ($wh->id == $work->plan_warehouse)
+                                                        <option value="{{ $wh->id }}" selected>
+                                                            {{ $wh->name }}</option>
                                                     @else
-                                                        <option value="{{ $wh->id }}">{{ $wh->warehouse_code }}</option>
+                                                        <option value="{{ $wh->id }}">{{ $wh->name }}
+                                                        </option>
                                                     @endif
                                                 @endforeach
                                             </select>
@@ -96,8 +100,12 @@
                                         <div class="form-group">
                                             <label for="type">Tipe Product</label>
                                             <select name="type" id="type" class="form-control w-25">
-                                                <option value="FG" @if($work->type == 'FG') selected @else @endif>Finishing Good</option>
-                                                <option value="WO" @if($work->type == 'WO') selected @else @endif>Work Order</option>
+                                                <option value="FG"
+                                                    @if ($work->type == 'FG') selected @else @endif>Finishing Good
+                                                </option>
+                                                <option value="WO"
+                                                    @if ($work->type == 'WO') selected @else @endif>Work Order
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -106,17 +114,6 @@
                                                 class="form-control w-25 @error('qty_result') is-invalid @enderror" required
                                                 value="{{ $work->qty_result }}">
                                             @error('qty_result')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="amount_cost">Biaya</label>
-                                            <input type="number" name="amount_cost" id="amount_cost"
-                                                class="form-control w-25 @error('amount_cost') is-invalid @enderror"
-                                                required value="{{ $work->amount_cost }}">
-                                            @error('amount_cost')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>

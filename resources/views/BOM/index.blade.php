@@ -100,20 +100,31 @@
                                             <tbody>
                                                 @if ($bom[0] == null)
                                                     <tr>
-                                                        <td colspan="12" class="text-center">Tidak ada data bill of materials</td>
+                                                        <td colspan="12" class="text-center">Tidak ada data bill of
+                                                            materials</td>
                                                     </tr>
                                                 @else
-                                                    @foreach ($bom as $bm)
+                                                    @foreach ($bom as $index_bm => $bm)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $bm->no_bom }}</td>
                                                             <td>{{ $bm->bom_code }}</td>
-                                                            <td>{{ $bm->supply->supply_code }}</td>
+                                                            <td>
+                                                                @foreach ($bm->supply as $sp)
+                                                                    {{ $sp->supply_code }} <br>
+                                                                @endforeach
+                                                            </td>
                                                             <td>{{ $bm->warehouse->warehouse_code }}</td>
                                                             <td>{{ $bm->name }}</td>
                                                             <td>{{ $bm->type_product }}</td>
                                                             <td>{{ $bm->qty }}</td>
-                                                            <td>{{ $bm->amount_cost }}</td>
+                                                            <td>
+                                                                @foreach ($amounts as $index_amount => $amount)
+                                                                    @if ($index_amount == $index_bm)
+                                                                        {{ $amount }}
+                                                                    @endif
+                                                                @endforeach
+                                                            </td>
                                                             <td>{{ $bm->information }}</td>
                                                             <td>
                                                                 <a href="/siswa/{{ $bm->id }}"

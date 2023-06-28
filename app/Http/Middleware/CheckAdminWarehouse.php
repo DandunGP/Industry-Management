@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CheckWarehouse
+class CheckAdminWarehouse
 {
     /**
      * Handle an incoming request.
@@ -19,8 +19,8 @@ class CheckWarehouse
     {
         if(Auth::user()->status == 'Gudang' || Auth::user()->status == 'Admin') {
             return $next($request);
+        }else{
+            return redirect()->route('staffDashboard');
         }
-        
-        return redirect()->route('staffDashboard');
     }
 }

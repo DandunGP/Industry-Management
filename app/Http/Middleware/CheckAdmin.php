@@ -19,14 +19,10 @@ class CheckAdmin
     {
         if(Auth::user()->status == 'Admin') {
             return $next($request);
-        }
-        
-        if(Auth::user()->status == 'Staff'){
-            return redirect()->route('staffDashboard');
-        }
-
-        if(Auth::user()->status == 'Gudang'){
+        }else if(Auth::user()->status == 'Gudang'){
             return redirect()->route('warehouseDashboard');
+        }else{
+            return redirect()->route('staffDashboard');
         }
     }
 }

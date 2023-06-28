@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('position');
+            $table->string('officer_picture');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

@@ -91,7 +91,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="qty">Qty</label>
+                    <label for="qty">Jumlah Supply</label>
                     <input type="number" class="form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ $incoming->qty }}">
                     @error('qty')
                         <div class="invalid-feedback">

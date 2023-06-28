@@ -14,10 +14,15 @@ class Incoming extends Model
         'no_po',
         'po_date',
         'date_of_receipt',
+        'supply_id',
         'supplier',
         'address',
         'no_sj_supplier',
         'qty',
         'information',
     ];
+
+    public function supply () {
+        return $this->belongsTo(Supply::class,'supply_id','id');
+    }
 }

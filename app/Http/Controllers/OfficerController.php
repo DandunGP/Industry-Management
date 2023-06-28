@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UploadOfficerPicture;
 use App\Models\Officer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class OfficerController extends Controller
 {
@@ -26,6 +28,7 @@ class OfficerController extends Controller
             'dob' => 'required',
             'gender' => 'required|string',
             'address' => 'required|string',
+            'officer_picture' => 'image',
             'phone' => 'required|numeric',
             'position' => 'required|string',
         ]);
@@ -42,7 +45,21 @@ class OfficerController extends Controller
             'status' => $user['status']
         ]);
 
-        $newUser = User::select('id')->where('username', '=', $user['username'])->first();
+        $newUser = User::select('id', 'username')->where('username', '=', $user['username'])->first();
+
+        if($request->officer_picture){
+            $filename = 'profile_picture_'. $newUser->username .'.' . $request->officer_picture->getClientOriginalExtension();
+            
+            Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
+            $path = 'picture_queue/' . $filename;
+            
+            $imageQueue = new UploadOfficerPicture($path);
+            dispatch($imageQueue);
+
+            $imageUrl = $imageQueue->handle();
+
+            Storage::delete('public/' . $path);
+        }
 
         Officer::create([
             'name' => $officer['name'],
@@ -51,6 +68,7 @@ class OfficerController extends Controller
             'gender' => $officer['gender'],
             'address' => $officer['address'],
             'phone' => $officer['phone'],
+            'officer_picture' => $imageUrl ?? "",
             'position' => $officer['position'],
             'user_id' => $newUser->id,
         ]);
@@ -72,6 +90,7 @@ class OfficerController extends Controller
             'gender' => 'required|string',
             'address' => 'required|string',
             'phone' => 'required',
+            'officer_picture' => 'image',
             'position' => 'required|string',
         ]);
         
@@ -81,6 +100,24 @@ class OfficerController extends Controller
             'status' => 'required'
         ]);
 
+        $checkOfficer = Officer::with(['user' => function($queryUser){
+            $queryUser->select('id', 'username');
+        }])->select('user_id', 'officer_picture')->where('id', $id)->first();
+
+        if($request->officer_picture){
+            $filename = 'profile_picture_'. $checkOfficer->user->username .'.' . $request->officer_picture->getClientOriginalExtension();
+            
+            Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
+            $path = 'picture_queue/' . $filename;
+            
+            $imageQueue = new UploadOfficerPicture($path);
+            dispatch($imageQueue);
+
+            $imageUrl = $imageQueue->handle();
+
+            Storage::delete('public/' . $path);
+        }
+
         Officer::where('id', $id)->update([
             'name' => $officer['name'],
             'nik' => $officer['nik'],
@@ -88,6 +125,7 @@ class OfficerController extends Controller
             'gender' => $officer['gender'],
             'address' => $officer['address'],
             'phone' => $officer['phone'],
+            'officer_picture' => $imageUrl ?? $checkOfficer->officer_picture,
             'position' => $officer['position'],
         ]);
 
@@ -107,5 +145,11 @@ class OfficerController extends Controller
         Officer::where('id', $id)->delete();
 
         return redirect()->route('officerDashboard');
+    }
+
+    public function getOfficer($id){
+        $officer = Officer::where('id', $id)->first();
+
+        return view('Officer.detail', ['officer' => $officer]);
     }
 }

@@ -15,8 +15,13 @@ class Officer extends Model
         'date_of_birth',
         'gender',
         'address',
+        'officer_picture',
         'phone',
         'position',
         'user_id',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

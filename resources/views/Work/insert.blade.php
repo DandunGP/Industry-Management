@@ -49,17 +49,6 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty">Qty</label>
-                                            <input type="number"
-                                                class="form-control w-25 @error('qty') is-invalid @enderror" id="qty"
-                                                name="qty" required value="{{ old('qty') }}">
-                                            @error('qty')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
                                             <label for="information">Informasi</label>
                                             <textarea class="form-control @error('information') is-invalid @enderror" id="information" name="information"
                                                 cols="30" rows="5" required>{{ old('information') }}</textarea>
@@ -73,7 +62,15 @@
                                             <label for="warehouse_id">Gudang</label>
                                             <select name="warehouse_id" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
-                                                    <option value="{{ $wh->id }}">{{ $wh->warehouse_code }}</option>
+                                                    <option value="{{ $wh->id }}">{{ $wh->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bill_of_material_id">BOM</label>
+                                            <select name="bill_of_material_id" id="bom" class="form-control w-25">
+                                                @foreach ($bom as $bm)
+                                                    <option value="{{ $bm->id }}">{{ $bm->bom_code }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -81,9 +78,20 @@
                                             <label for="plan_warehouse">Gudang Rencana</label>
                                             <select name="plan_warehouse" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
-                                                    <option value="{{ $wh->id }}">{{ $wh->warehouse_code }}</option>
+                                                    <option value="{{ $wh->id }}">{{ $wh->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="product_name">Nama Produk</label>
+                                            <input type="text"
+                                                class="form-control w-25 @error('product_name') is-invalid @enderror"
+                                                id="product_name" name="product_name" required>
+                                            @error('product_name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="type">Tipe Product</label>
@@ -103,7 +111,7 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="form-group">
+                                        {{-- <div class="form-group">
                                             <label for="amount_cost">Biaya</label>
                                             <input type="number" name="amount_cost" id="amount_cost"
                                                 class="form-control w-25 @error('amount_cost') is-invalid @enderror"
@@ -113,7 +121,7 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                        </div>
+                                        </div> --}}
                                         <div class="mt-3">
                                             <a href="{{ route('workDashboard') }}" class="btn btn-primary">Kembali</a>
                                             <button type="submit" class="btn btn-success">Simpan</button>

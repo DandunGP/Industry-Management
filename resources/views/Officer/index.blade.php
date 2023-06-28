@@ -93,7 +93,7 @@
                         <td>{{ $of->phone }}</td>
                         <td>{{ $of->position }}</td>
                         <td>
-                          <a href="/siswa/{{ $of->id }}" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
+                          <a href="officer/get-officer/{{ $of->id }}" class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                           <a href="{{route('editOfficer', $of->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a>
                           <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" onclick="handleDelete({{ $of->id }})"><i class="ti-trash"></i></button>
                         </td>

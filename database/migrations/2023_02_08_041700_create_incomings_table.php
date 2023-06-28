@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Supply;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,9 +20,10 @@ return new class extends Migration
             $table->string("no_po");
             $table->string("po_date");
             $table->string("date_of_receipt");
-            $table->string("supplier");
             $table->string("address");
+            $table->string("supplier");
             $table->string("no_sj_supplier");
+            $table->foreignIdFor(Supply::class);
             $table->string("qty");
             $table->string("information");
             $table->timestamps();

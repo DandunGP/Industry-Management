@@ -3,21 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supply;
+use App\Models\Warehouse;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SupplyController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $supply = Supply::paginate(25);
-    
+
         return view('Supply.index', ['supply' => $supply]);
     }
 
-    public function create(){
-        return view('Supply.insert');
+    public function create()
+    {
+        $warehouses = Warehouse::all();
+        return view('Supply.insert', ['warehouses' => $warehouses]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'supply_code' => 'required',
             'name' => 'required',
@@ -29,6 +36,8 @@ class SupplyController extends Controller
             'status' => 'required',
             'purchase_price' => 'required',
             'selling_price' => 'required',
+            'warehouse_id' => 'required',
+            'qty' => 'required'
         ]);
 
         Supply::create([
@@ -40,20 +49,24 @@ class SupplyController extends Controller
             'memo' => $request->memo,
             'part_number' => $request->part_number,
             'status' => $request->status,
+            'qty' => $request->qty,
             'purchase_price' => $request->purchase_price,
             'selling_price' => $request->selling_price,
+            'warehouse_id' => $request->warehouse_id,
         ]);
 
         return redirect()->route('supplyDashboard');
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $supply = Supply::where('id', $id)->first();
-
-        return view('Supply.edit', ['supply' => $supply]);
+        $warehouses = Warehouse::all();
+        return view('Supply.edit', ['supply' => $supply, 'warehouses' => $warehouses]);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $request->validate([
             'supply_code' => 'required',
             'name' => 'required',
@@ -65,6 +78,7 @@ class SupplyController extends Controller
             'status' => 'required',
             'purchase_price' => 'required',
             'selling_price' => 'required',
+            'qty' => 'required'
         ]);
 
         Supply::where('id', $id)->update([
@@ -78,14 +92,43 @@ class SupplyController extends Controller
             'status' => $request->status,
             'purchase_price' => $request->purchase_price,
             'selling_price' => $request->selling_price,
+            'qty' => $request->qty,
         ]);
 
         return redirect()->route('supplyDashboard');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         Supply::where('id', $id)->delete();
-        
+
         return redirect()->route('supplyDashboard');
+    }
+
+    public function printPDF(Request $request)
+    {
+        if($request->tanggal1 && $request->tanggal2)
+        {
+            $supplys = Supply::whereBetween('created_at',[$request->tanggal1,$request->tanggal2])->get();
+            $title = 'Laporan Supply';
+            $date = date('j F Y', strtotime($request->tanggal1));
+            $date2 = date('j F Y', strtotime($request->tanggal2));
+            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title', 'date','date2'));
+        }elseif($request->tanggal1){
+            $dateNow = Carbon::now();
+            $supplys = Supply::whereBetween('created_at',[$request->tanggal1,$dateNow])->get();
+            $title = 'Laporan Supply';
+            $date = date('j F Y', strtotime($request->tanggal1));
+            $date2 = date('j F Y', strtotime($dateNow));
+            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title', 'date','date2'));
+        }else{
+            $supplys = Supply::all();
+            $title = 'Laporan Supply';
+            $date = '';
+            $date2 = '';
+            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title','date','date2'));
+        }
+        return $pdf->stream('Laporan Supply.pdf');
+        
     }
 }

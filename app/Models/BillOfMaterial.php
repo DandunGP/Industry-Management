@@ -18,12 +18,16 @@ class BillOfMaterial extends Model
         'warehouse_id',
         'type_product',
         'qty',
-        'amount_cost',
     ];
 
     public function supply()
     {
-        return $this->belongsTo(Supply::class);
+        return $this->belongsToMany(Supply::class, 'bill_of_material_supplies', 'bill_of_material_id', 'supply_id');
+    }
+
+    public function bill_supply()
+    {
+        return $this->hasMany(BillOfMaterialSupply::class);
     }
 
     public function warehouse()

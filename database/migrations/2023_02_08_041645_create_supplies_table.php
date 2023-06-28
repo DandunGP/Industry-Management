@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string("memo");
             $table->string("part_number");
             $table->string("status");
+            $table->integer("qty");
             $table->bigInteger("purchase_price");
             $table->bigInteger("selling_price");
             $table->foreignIdFor(Warehouse::class);

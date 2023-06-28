@@ -25,7 +25,7 @@
             <div class="col-md-12 grid-margin">
             <div class="card p-4">
                 <div class="card-body">
-                <form  action="{{route('updateOfficer', $officer->id)}}" method="POST">
+                <form  action="{{route('updateOfficer', $officer->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                     <label for="name">Nama Lengkap</label>
@@ -81,6 +81,11 @@
                         <option value="Staff" @if($officer->position == 'Staff') selected @else @endif>Staff</option>
                         <option value="Gudang" @if($officer->position == 'Gudang') selected @else @endif>Gudang</option>
                     </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="officer_picture">Foto</label>
+                        <input type="file" name="officer_picture" class="form-control">
+                        <span class="text-danger mt-3" style="font-size: 15px;">Kosongi jika tidak ingin mengganti Foto</span>
                     </div>
                     <div class="form-group">
                     <label for="username">Username</label>

@@ -28,31 +28,31 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authentication'])->name('loginAuth')->middleware('guest');
 
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
-Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard')->middleware('checkAdmin');
+Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard')->middleware('auth');
 
 // User CRUD
 Route::prefix('user')->group(function () {
     // Staff
     Route::prefix('staff')->group(function () {
         Route::get('/', [AdminController::class, 'getUserStaff'])->middleware('checkAdmin')->name('staffDashboard');
-        Route::get('/edit-user/{id}', [AdminController::class, 'editUserStaff'])->name('editUserStaff');
-        Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserStaff'])->name('updateUserStaff');
+        Route::get('/edit-user/{id}', [AdminController::class, 'editUserStaff'])->middleware('checkAdmin')->name('editUserStaff');
+        Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserStaff'])->middleware('checkAdmin')->name('updateUserStaff');
     });
 
     // Gudang
     Route::prefix('warehouse')->group(function () {
         Route::get('/', [AdminController::class, 'getUserWarehouse'])->middleware('checkAdmin')->name('warehouseDashboard');
-        Route::get('/edit-user/{id}', [AdminController::class, 'editUserWarehouse'])->name('editUserWarehouse');
-        Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserWarehouse'])->name('updateUserWarehouse');
+        Route::get('/edit-user/{id}', [AdminController::class, 'editUserWarehouse'])->middleware('checkAdmin')->name('editUserWarehouse');
+        Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserWarehouse'])->middleware('checkAdmin')->name('updateUserWarehouse');
     });
 });
 
 // Officer CRUD
 Route::prefix('officer')->group(function () {
     Route::get('/', [OfficerController::class, 'index'])->middleware('checkAdmin')->name('officerDashboard');
-    Route::get('/get-officer', [OfficerController::class, 'getOfficer'])->middleware('checkAdmin')->name('getOfficer');
+    Route::get('/get-officer/{id}', [OfficerController::class, 'getOfficer'])->middleware('checkAdmin')->name('getOfficer');
     Route::get('/add-officer', [OfficerController::class, 'create'])->name('addOfficer')->middleware('checkAdmin');
     Route::post('/add-officer/store', [OfficerController::class, 'store'])->name('storeOfficer')->middleware('checkAdmin');
     Route::get('/edit-officer/{id}', [OfficerController::class, 'edit'])->name('editOfficer')->middleware('checkAdmin');
@@ -65,7 +65,7 @@ Route::prefix('officer')->group(function () {
 
 // Warehouse CRUD
 Route::prefix('warehouse')->group(function () {
-    Route::get('/', [WarehouseController::class, 'index'])->name('dashboardWarehouse');
+    Route::get('/', [WarehouseController::class, 'index'])->name('dashboardWarehouse')->middleware('checkAdminWarehouse');
     Route::get('/add-warehouse', [WarehouseController::class, 'create'])->name('addWarehouse')->middleware('checkAdmin');
     Route::post('/add-warehouse/store', [WarehouseController::class, 'store'])->name('storeWarehouse')->middleware('checkAdmin');
     Route::get('/edit-warehouse/{id}', [WarehouseController::class, 'edit'])->name('editWarehouse')->middleware('checkAdmin');
@@ -78,12 +78,14 @@ Route::prefix('warehouse')->group(function () {
 
 // Product CRUD
 Route::prefix('product')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('productDashboard');
-    Route::get('/add-product', [ProductController::class, 'create'])->name('addProduct')->middleware('checkAdmin');
-    Route::post('/add-product/store', [ProductController::class, 'store'])->name('storeProduct')->middleware('checkAdmin');
-    Route::get('/edit-product/{id}', [ProductController::class, 'edit'])->name('editProduct')->middleware('checkAdmin');
-    Route::post('/edit-product/{id}/update', [ProductController::class, 'update'])->name('updateProduct')->middleware('checkAdmin');
-    Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('deleteProduct')->middleware('checkAdmin');
+    Route::get('/', [ProductController::class, 'index'])->middleware('checkAdminStaff')->name('productDashboard');
+    Route::get('/add-product', [ProductController::class, 'create'])->name('addProduct')->middleware('checkAdminStaff');
+    Route::post('/add-product/store', [ProductController::class, 'store'])->name('storeProduct')->middleware('checkAdminStaff');
+    Route::get('/edit-product/{id}', [ProductController::class, 'edit'])->name('editProduct')->middleware('checkAdminStaff');
+    Route::post('/edit-product/{id}/update', [ProductController::class, 'update'])->name('updateProduct')->middleware('checkAdminStaff');
+    Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('deleteProduct')->middleware('checkAdminStaff');
+
+    Route::post('/print-pdf', [ProductController::class, 'printPDF'])->name('printProduct')->middleware('checkAdminStaff');
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchProduct'])->name('searchProduct');
@@ -91,12 +93,13 @@ Route::prefix('product')->group(function () {
 
 // Incoming Goods CRUD
 Route::prefix('incoming')->group(function () {
-    Route::get('/', [IncomingController::class, 'index'])->name('incomingDashboard');
-    Route::get('/add-incoming', [IncomingController::class, 'create'])->name('addIncoming')->middleware('checkAdmin');
-    Route::post('/add-incoming/store', [IncomingController::class, 'store'])->name('storeIncoming')->middleware('checkAdmin');
-    Route::get('/edit-incoming/{id}', [IncomingController::class, 'edit'])->name('editIncoming')->middleware('checkAdmin');
-    Route::post('/edit-incoming/{id}/update', [IncomingController::class, 'update'])->name('updateIncoming')->middleware('checkAdmin');
-    Route::delete('/delete/{id}', [IncomingController::class, 'delete'])->name('deleteIncoming')->middleware('checkAdmin');
+    Route::get('/', [IncomingController::class, 'index'])->name('incomingDashboard')->middleware('checkAdminWarehouse');
+    Route::get('/add-incoming', [IncomingController::class, 'create'])->name('addIncoming')->middleware('checkAdminWarehouse');
+    Route::post('/add-incoming/store', [IncomingController::class, 'store'])->name('storeIncoming')->middleware('checkAdminWarehouse');
+    Route::get('/edit-incoming/{id}', [IncomingController::class, 'edit'])->name('editIncoming')->middleware('checkAdminWarehouse');
+    Route::post('/edit-incoming/{id}/update', [IncomingController::class, 'update'])->name('updateIncoming')->middleware('checkAdminWarehouse');
+
+    Route::post('/print-pdf', [IncomingController::class, 'printPDF'])->name('printIncoming')->middleware('checkAdminWarehouse');
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchIncoming'])->name('searchIncoming');
@@ -104,12 +107,14 @@ Route::prefix('incoming')->group(function () {
 
 // Supply CRUD
 Route::prefix('supply')->group(function () {
-    Route::get('/', [SupplyController::class, 'index'])->name('supplyDashboard');
+    Route::get('/', [SupplyController::class, 'index'])->name('supplyDashboard')->middleware('checkAdminStaff');
     Route::get('/add-supply', [SupplyController::class, 'create'])->name('addSupply')->middleware('checkAdmin');
     Route::post('/add-supply/store', [SupplyController::class, 'store'])->name('storeSupply')->middleware('checkAdmin');
     Route::get('/edit-supply/{id}', [SupplyController::class, 'edit'])->name('editSupply')->middleware('checkAdmin');
     Route::post('/edit-supply/{id}/update', [SupplyController::class, 'update'])->name('updateSupply')->middleware('checkAdmin');
     Route::delete('/delete/{id}', [SupplyController::class, 'delete'])->name('deleteSupply')->middleware('checkAdmin');
+
+    Route::post('/print-pdf', [SupplyController::class, 'printPDF'])->name('printSupply')->middleware('checkAdmin');
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchSupply'])->name('searchSupply');
@@ -117,12 +122,14 @@ Route::prefix('supply')->group(function () {
 
 // Bill Of Materials CRUD
 Route::prefix('bill-of-materials')->group(function () {
-    Route::get('/', [BillController::class, 'index'])->name('billDashboard');
-    Route::get('/add-bill-of-materials', [BillController::class, 'create'])->name('addBill')->middleware('checkAdmin');
-    Route::post('/add-bill-of-materials/store', [BillController::class, 'store'])->name('storeBill')->middleware('checkAdmin');
-    Route::get('/edit-bill-of-materials/{id}', [BillController::class, 'edit'])->name('editBill')->middleware('checkAdmin');
-    Route::post('/edit-bill-of-materials/{id}/update', [BillController::class, 'update'])->name('updateBill')->middleware('checkAdmin');
-    Route::delete('/delete/{id}', [BillController::class, 'delete'])->name('deleteBill')->middleware('checkAdmin');
+    Route::get('/', [BillController::class, 'index'])->name('billDashboard')->middleware('checkAdminStaff');
+    Route::get('/add-bill-of-materials', [BillController::class, 'create'])->name('addBill')->middleware('checkAdminStaff');
+    Route::post('/add-bill-of-materials/store', [BillController::class, 'store'])->name('storeBill')->middleware('checkAdminStaff');
+    Route::get('/edit-bill-of-materials/{id}', [BillController::class, 'edit'])->name('editBill')->middleware('checkAdminStaff');
+    Route::post('/edit-bill-of-materials/{id}/update', [BillController::class, 'update'])->name('updateBill')->middleware('checkAdminStaff');
+    Route::delete('/delete/{id}', [BillController::class, 'delete'])->name('deleteBill')->middleware('checkAdminStaff');
+    Route::get('/delete-bill-of-materials-supply/{id}', [BillController::class, 'deleteSupply'])->name('deleteBillSupply')->middleware('checkAdminStaff');
+
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchBill'])->name('searchBill');
@@ -130,12 +137,14 @@ Route::prefix('bill-of-materials')->group(function () {
 
 // Work Order CRUD
 Route::prefix('work-order')->group(function () {
-    Route::get('/', [WorkController::class, 'index'])->name('workDashboard');
-    Route::get('/add-work-order', [WorkController::class, 'create'])->name('addWork')->middleware('checkAdmin');
-    Route::post('/add-work-order/store', [WorkController::class, 'store'])->name('storeWork')->middleware('checkAdmin');
-    Route::get('/edit-work-order/{id}', [WorkController::class, 'edit'])->name('editWork')->middleware('checkAdmin');
-    Route::post('/edit-work-order/{id}/update', [WorkController::class, 'update'])->name('updateWork')->middleware('checkAdmin');
-    Route::delete('/delete/{id}', [WorkController::class, 'delete'])->name('deleteWork')->middleware('checkAdmin');
+    Route::get('/', [WorkController::class, 'index'])->name('workDashboard')->middleware('checkAdminStaff');
+    Route::get('/add-work-order', [WorkController::class, 'create'])->name('addWork')->middleware('checkAdminStaff');
+    Route::post('/add-work-order/store', [WorkController::class, 'store'])->name('storeWork')->middleware('checkAdminStaff');
+    Route::get('/edit-work-order/{id}', [WorkController::class, 'edit'])->name('editWork')->middleware('checkAdminStaff');
+    Route::post('/edit-work-order/{id}/update', [WorkController::class, 'update'])->name('updateWork')->middleware('checkAdminStaff');
+    Route::delete('/delete/{id}', [WorkController::class, 'delete'])->name('deleteWork')->middleware('checkAdminStaff');
+
+    Route::post('/print-pdf', [WorkController::class, 'printPDF'])->name('printWork')->middleware('checkAdminStaff');
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchWork'])->name('searchWork');

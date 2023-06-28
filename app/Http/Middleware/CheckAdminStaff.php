@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CheckStaff
+class CheckAdminStaff
 {
     /**
      * Handle an incoming request.
@@ -17,10 +17,10 @@ class CheckStaff
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->status == 'Staff' || Auth::user()->status == 'Admin') {
+        if(Auth::user()->status == 'Admin' || Auth::user()->status == 'Staff') {
             return $next($request);
+        }else {
+            return redirect()->route('warehouseDashboard');
         }
-        
-        return redirect()->route('warehouseDashboard');
     }
 }

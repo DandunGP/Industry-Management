@@ -20,5 +20,12 @@ class Supply extends Model
         'status',
         'purchase_price',
         'selling_price',
+        'qty',
+        'warehouse_id'
     ];
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
 }

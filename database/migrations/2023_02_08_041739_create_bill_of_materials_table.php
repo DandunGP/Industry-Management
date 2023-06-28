@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreignIdFor(Warehouse::class);
             $table->string("type_product");
             $table->integer("qty");
-            $table->bigInteger("amount_cost");
             $table->timestamps();
         });
     }

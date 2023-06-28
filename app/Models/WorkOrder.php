@@ -15,15 +15,20 @@ class WorkOrder extends Model
         'qty',
         'information',
         'warehouse_id',
+        'bill_of_material_id',
         'plan_warehouse',
         'type',
         'qty_result',
-        'amount_cost',
     ];
 
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class);
+    }
+
+    public function billOfMaterial()
+    {
+        return $this->belongsTo(BillOfMaterial::class);
     }
 
     public function planWarehouse()

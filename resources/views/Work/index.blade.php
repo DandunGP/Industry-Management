@@ -100,10 +100,11 @@
                                             <tbody>
                                                 @if ($work[0] == null)
                                                     <tr>
-                                                        <td colspan="12" class="text-center">Tidak ada data bill of materials</td>
+                                                        <td colspan="12" class="text-center">Tidak ada data bill of
+                                                            materials</td>
                                                     </tr>
                                                 @else
-                                                    @foreach ($work as $wo)
+                                                    @foreach ($work as $index_wo => $wo)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $wo->no_wo }}</td>
@@ -114,7 +115,13 @@
                                                             <td>{{ $wo->planWarehouse->warehouse_code }}</td>
                                                             <td>{{ $wo->type }}</td>
                                                             <td>{{ $wo->qty_result }}</td>
-                                                            <td>{{ $wo->amount_cost }}</td>
+                                                            <td>
+                                                                @foreach ($amounts as $index_amount => $amount)
+                                                                    @if ($index_wo == $index_amount)
+                                                                        {{ $amount }}
+                                                                    @endif
+                                                                @endforeach
+                                                            </td>
                                                             <td>
                                                                 <a href="/siswa/{{ $wo->id }}"
                                                                     class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
@@ -137,6 +144,25 @@
                                             {{ $work->links() }}
                                         </div>
                                     </div>
+                                    <div class="row mt-3">
+                                        <div class="col-3">
+                                            <h6>Print Laporan Work Order</h6>
+                                        </div>
+                                    </div>
+                                    <form action="{{ route('printWork') }}" method="post">
+                                        @csrf
+                                        <div class="row align-items-center">
+                                            <div class="col-3">
+                                                <input type="date" name="tanggal1" class="form-control">
+                                            </div>
+                                            <div class="col-3">
+                                                <input type="date" name="tanggal2" class="form-control">
+                                            </div>
+                                            <div class="col-6">
+                                                <button type="submit" class="btn btn-primary">Print PDF</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
