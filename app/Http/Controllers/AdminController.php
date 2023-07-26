@@ -40,16 +40,26 @@ class AdminController extends Controller
         $request->validate([
             'username' => 'required|string',
             'password' => 'required',
+            'confirm_password' => 'required',
             'status' => 'required'
         ]);
 
-        User::where('id', $id)->update([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'status' => $request->status
-        ]);
+        if($request->password == $request->confirm_password){
+            User::where('id', $id)->update([
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'status' => $request->status
+            ]);
 
-        return redirect()->route('staffDashboard');
+            return redirect()->route('staffDashboard');
+        }
+        
+        session()->flash('alert.message', "confirm password doesn't match");
+        session()->flash('alert.type', "failed");
+
+        $user = User::where('id', $id)->first();
+
+        return view('User.Staff.edit', ['user' => $user]);
     }
 
     public function getUserWarehouse(){
@@ -68,15 +78,25 @@ class AdminController extends Controller
         $request->validate([
             'username' => 'required|string',
             'password' => 'required',
+            'confirm_password' => 'required',
             'status' => 'required'
         ]);
 
-        User::where('id', $id)->update([
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'status' => $request->status
-        ]);
+        if($request->password == $request->confirm_password){
+            User::where('id', $id)->update([
+                'username' => $request->username,
+                'password' => Hash::make($request->password),
+                'status' => $request->status,
+            ]);    
 
-        return redirect()->route('warehouseDashboard');
+            return redirect()->route('warehouseDashboard');
+        }
+
+        session()->flash('alert.message', "confirm password doesn't match");
+        session()->flash('alert.type', "failed");
+
+        $user = User::where('id', $id)->first();
+
+        return view('User.Gudang.edit', ['user' => $user]);
     }
 }

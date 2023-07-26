@@ -51,21 +51,9 @@
                                         <div class="form-group">
                                             <label for="po_date">Tanggal PO</label>
                                             <input type="date"
-                                                class="form-control w-25 @error('po_date') is-invalid @enderror"
+                                                class="form-control date-field w-25 @error('po_date') is-invalid @enderror"
                                                 id="po_date" name="po_date" required value="{{ old('po_date') }}">
                                             @error('po_date')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="date_of_receipt">Tanggal Penerimaan</label>
-                                            <input type="date"
-                                                class="form-control w-25 @error('date_of_receipt') is-invalid @enderror"
-                                                id="date_of_receipt" name="date_of_receipt" required
-                                                value="{{ old('date_of_receipt') }}">
-                                            @error('date_of_receipt')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -93,9 +81,22 @@
                                                 name="id_supply" id="id_supply">
                                                 <option selected>Pilih Barang</option>
                                                 @foreach ($supply as $sp)
-                                                    <option value="{{ $sp->id }}">{{ $sp->supply_code }}</option>
+                                                    <option value="{{ $sp->id }}">{{ $sp->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="input-total-supply" id="input-total-supply">
+                                            <div class="form-group">
+                                                <label for="qty">Jumlah Supply</label>
+                                                <input type="number"
+                                                    class="int-valid form-control w-25 @error('qty') is-invalid @enderror"
+                                                    id="qty" name="qty" value="{{ old('qty') }}">
+                                                @error('qty')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
                                         <div class="input-supply" style="display: none" id="input_supply">
                                             <div class="form-group">
@@ -181,7 +182,7 @@
                                             <div class="form-group">
                                                 <label for="qty">Jumlah Supply</label>
                                                 <input type="number"
-                                                    class="form-control w-25 @error('qty') is-invalid @enderror"
+                                                    class="int-valid form-control w-25 @error('qty') is-invalid @enderror"
                                                     id="qty" name="qty" value="{{ old('qty') }}" disabled>
                                                 @error('qty')
                                                     <div class="invalid-feedback">
@@ -200,7 +201,7 @@
                                             <div class="form-group">
                                                 <label for="purchase_price">Harga Beli</label>
                                                 <input type="number" name="purchase_price" id="purchase_price"
-                                                    class="form-control w-25 @error('purchase_price') is-invalid @enderror"
+                                                    class="int-valid form-control w-25 @error('purchase_price') is-invalid @enderror"
                                                     value="{{ old('purchase_price') }}" disabled>
                                                 @error('purchase_price')
                                                     <div class="invalid-feedback">
@@ -211,7 +212,7 @@
                                             <div class="form-group">
                                                 <label for="selling_price">Harga Jual</label>
                                                 <input type="number" name="selling_price" id="selling_price"
-                                                    class="form-control w-25 @error('selling_price') is-invalid @enderror"
+                                                    class="int-valid form-control w-25 @error('selling_price') is-invalid @enderror"
                                                     value="{{ old('selling_price') }}" disabled>
                                                 @error('selling_price')
                                                     <div class="invalid-feedback">
@@ -265,4 +266,40 @@
                 </div>
             </div>
             <script src="{{ asset('js/addSupplyInIncomings.js') }}"></script>
+            <script>
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                var dateInput = document.getElementById('po_date');
+
+                dateInput.addEventListener('input', function() {
+                var selectedDate = new Date(dateInput.value);
+
+                if (selectedDate >= today) {
+                    alert("Invalid date. Please select a date before today.");
+                    dateInput.value = '';
+                    dateInput.classList.add('invalid-date');
+                } else{
+                    dateInput.classList.remove('invalid-date');
+                }
+                });
+
+
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
+                }
+            </script>
         @endsection

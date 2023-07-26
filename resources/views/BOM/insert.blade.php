@@ -27,28 +27,6 @@
                                     <form action="{{ route('storeBill') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <label for="no_bom">NO Bill</label>
-                                            <input type="text"
-                                                class="form-control w-25 @error('no_bom') is-invalid @enderror"
-                                                id="no_bom" name="no_bom" required value="{{ old('no_bom') }}">
-                                            @error('no_bom')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bom_code">Kode Bill</label>
-                                            <input type="text"
-                                                class="form-control w-25 @error('bom_code') is-invalid @enderror"
-                                                id="bom_code" name="bom_code" required value="{{ old('bom_code') }}">
-                                            @error('bom_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
                                             <label for="name">Nama Bill</label>
                                             <input type="text"
                                                 class="form-control w-50 @error('name') is-invalid @enderror" id="name"
@@ -95,7 +73,7 @@
                                         <div class="form-group">
                                             <label for="qty">Qty</label>
                                             <input type="number" name="qty" id="qty"
-                                                class="form-control w-25 @error('qty') is-invalid @enderror" required
+                                                class="int-valid form-control w-25 @error('qty') is-invalid @enderror" required
                                                 value="{{ old('qty') }}">
                                             @error('qty')
                                                 <div class="invalid-feedback">
@@ -141,6 +119,7 @@
                     inputElement.setAttribute('name', 'qty_supply[]');
                     inputElement.setAttribute('class', 'form-control w-25 mb-2 mx-2');
                     inputElement.setAttribute('type', 'number');
+                    inputElement.addEventListener('input', validateQtySupply);
                     divElement.appendChild(inputElement);
 
                     var deleteButton = document.createElement('button');
@@ -154,11 +133,36 @@
                     selectContainer.appendChild(divElement);
 
                     selectCount++;
+
+                    function validateQtySupply() {
+                        var value = parseFloat(inputElement.value);
+                        console.log(value < 0);
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputElement.value = '';
+                        }
+                    }
                 }
 
                 function removeInput(inputId) {
                     var inputElement = document.getElementById('input' + inputId);
                     inputElement.remove();
+                }
+
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
                 }
             </script>
         @endsection

@@ -107,28 +107,12 @@ class SupplyController extends Controller
 
     public function printPDF(Request $request)
     {
-        if($request->tanggal1 && $request->tanggal2)
-        {
-            $supplys = Supply::whereBetween('created_at',[$request->tanggal1,$request->tanggal2])->get();
-            $title = 'Laporan Supply';
-            $date = date('j F Y', strtotime($request->tanggal1));
-            $date2 = date('j F Y', strtotime($request->tanggal2));
-            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title', 'date','date2'));
-        }elseif($request->tanggal1){
-            $dateNow = Carbon::now();
-            $supplys = Supply::whereBetween('created_at',[$request->tanggal1,$dateNow])->get();
-            $title = 'Laporan Supply';
-            $date = date('j F Y', strtotime($request->tanggal1));
-            $date2 = date('j F Y', strtotime($dateNow));
-            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title', 'date','date2'));
-        }else{
-            $supplys = Supply::all();
-            $title = 'Laporan Supply';
-            $date = '';
-            $date2 = '';
-            $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title','date','date2'));
-        }
-        return $pdf->stream('Laporan Supply.pdf');
+        $supplys = Supply::all();
+        $title = 'Laporan Supply';
+        $date = '';
+        $date2 = '';
+        $pdf = Pdf::loadView('PDF.supply', compact('supplys', 'title','date','date2'));
         
+        return $pdf->stream('Laporan Supply.pdf');
     }
 }

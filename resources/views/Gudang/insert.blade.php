@@ -28,15 +28,6 @@
                 <form  action="{{route('storeWarehouse')}}" method="POST">
                     @csrf
                     <div class="form-group">
-                    <label for="name">Kode Gudang</label>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">GEPU-</div>
-                            </div>
-                        <input type="text" class="form-control" name="warehouse_code" id="inlineFormInputGroupUsername2">
-                        </div>
-                    </div>
-                    <div class="form-group">
                     <label for="name">Nama Gudang</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required value="{{ old('name') }}">
                     @error('name')

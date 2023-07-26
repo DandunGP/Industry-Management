@@ -55,15 +55,6 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="date_of_receipt">Tanggal Penerimaan</label>
-                    <input type="date" class="form-control w-25 @error('date_of_receipt') is-invalid @enderror" id="date_of_receipt" name="date_of_receipt" required value="{{ $incoming->date_of_receipt }}">
-                    @error('date_of_receipt')
-                        <div class="invalid-feedback">
-                        {{ $message }}
-                        </div>
-                    @enderror
-                    </div>
-                    <div class="form-group">
                     <label for="supplier">Supplier</label>
                     <input type="text" class="form-control @error('supplier') is-invalid @enderror" id="supplier" name="supplier" required value="{{ $incoming->supplier }}">
                     @error('supplier')

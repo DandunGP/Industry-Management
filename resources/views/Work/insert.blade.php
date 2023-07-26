@@ -26,27 +26,18 @@
                                 <div class="card-body">
                                     <form action="{{ route('storeWork') }}" method="POST">
                                         @csrf
-                                        <div class="form-group">
-                                            <label for="no_wo">No WO</label>
-                                            <input type="text"
-                                                class="form-control w-25 @error('no_wo') is-invalid @enderror"
-                                                id="no_wo" name="no_wo" required value="{{ old('no_wo') }}">
-                                            @error('no_wo')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                        @if (session('alert'))
+                                        <div class="alert alert-{{ session('alert.type') }}">
+                                            {{ session('alert.message') }}
                                         </div>
+                                        @endif
                                         <div class="form-group">
-                                            <label for="wo_date">Tanggal WO</label>
-                                            <input type="date"
-                                                class="form-control w-25 @error('wo_date') is-invalid @enderror"
-                                                id="wo_date" name="wo_date" required value="{{ old('wo_date') }}">
-                                            @error('wo_date')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                            <label for="bill_of_material_id">Bill Of Materials</label>
+                                            <select name="bill_of_material_id" id="bom" class="form-control w-25">
+                                                @foreach ($bom as $bm)
+                                                    <option value="{{ $bm->id }}">{{ $bm->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="information">Informasi</label>
@@ -57,22 +48,6 @@
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="warehouse_id">Gudang</label>
-                                            <select name="warehouse_id" id="warehouse" class="form-control w-25">
-                                                @foreach ($warehouse as $wh)
-                                                    <option value="{{ $wh->id }}">{{ $wh->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bill_of_material_id">BOM</label>
-                                            <select name="bill_of_material_id" id="bom" class="form-control w-25">
-                                                @foreach ($bom as $bm)
-                                                    <option value="{{ $bm->id }}">{{ $bm->bom_code }}</option>
-                                                @endforeach
-                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="plan_warehouse">Gudang Rencana</label>
@@ -94,16 +69,9 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="type">Tipe Product</label>
-                                            <select name="type" id="type" class="form-control w-25">
-                                                <option value="FG">Finishing Good</option>
-                                                <option value="WO">Work Order</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="qty_result">Hasil Qty</label>
                                             <input type="number" name="qty_result" id="qty_result"
-                                                class="form-control w-25 @error('qty_result') is-invalid @enderror" required
+                                                class="int-valid form-control w-25 @error('qty_result') is-invalid @enderror" required
                                                 value="{{ old('qty_result') }}">
                                             @error('qty_result')
                                                 <div class="invalid-feedback">
@@ -133,4 +101,23 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
+                }
+            </script>
         @endsection

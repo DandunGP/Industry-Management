@@ -111,7 +111,7 @@
                                                             <td>{{ $inc->no_bpb }}</td>
                                                             <td>{{ $inc->no_po }}</td>
                                                             <td>{{ date('j F Y', strtotime($inc->po_date)) }}</td>
-                                                            <td>{{ date('j F Y', strtotime($inc->date_of_receipt)) }}</td>
+                                                            <td>{{ date('j F Y', strtotime($inc->created_at)) }}</td>
                                                             <td>{{ $inc->supply->supply_code }}</td>
                                                             <td>{{ $inc->supplier }}</td>
                                                             <td>{{ $inc->address }}</td>
@@ -119,8 +119,6 @@
                                                             <td>{{ $inc->qty }}</td>
                                                             <td>{{ $inc->information }}</td>
                                                             <td>
-                                                                <a href="/siswa/{{ $inc->id }}"
-                                                                    class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                                                                 <a href="{{ route('editIncoming', $inc->id) }}"
                                                                     class="btn btn-warning btn-sm"><i
                                                                         class="ti-pencil-alt"></i></a>

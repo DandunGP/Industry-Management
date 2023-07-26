@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('officers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nik');
+            $table->string('nik')->unique();
             $table->date('date_of_birth');
             $table->string('gender');
             $table->string('address');

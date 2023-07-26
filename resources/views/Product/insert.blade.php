@@ -28,15 +28,6 @@
                 <form  action="{{route('storeProduct')}}" method="POST">
                     @csrf
                     <div class="form-group">
-                    <label for="product_code">Kode Produk</label>
-                        <div class="input-group mb-2 mr-sm-2 w-25">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">PEPU-</div>
-                            </div>
-                        <input type="text" class="form-control" name="product_code" id="inlineFormInputGroupUsername2">
-                        </div>
-                    </div>
-                    <div class="form-group">
                     <label for="product_name">Nama Produk</label>
                     <input type="text" class="form-control w-50 @error('product_name') is-invalid @enderror" id="product_name" name="product_name" required value="{{ old('product_name') }}">
                     @error('product_name')
@@ -47,7 +38,7 @@
                     </div>
                     <div class="form-group">
                     <label for="qty">Qty</label>
-                    <input type="number" class="form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ old('qty') }}">
+                    <input type="number" class="int-valid form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ old('qty') }}">
                     @error('qty')
                         <div class="invalid-feedback">
                         {{ $message }}
@@ -55,7 +46,7 @@
                     @enderror
                     </div>
                     <div class="mt-3">
-                    <a href="{{route('dashboardWarehouse')}}" class="btn btn-primary">Kembali</a>
+                    <a href="{{route('productDashboard')}}" class="btn btn-primary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan</button>
                     </div>
                 </form>
@@ -65,5 +56,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Validation Input Int
+    const intValidation = document.querySelectorAll('.int-valid');
+
+    intValidation.forEach(function(intValid) {
+        intValid.addEventListener('input', validateInput);
+    });
+
+    function validateInput() {
+        intValidation.forEach(function(inputField) {
+            const value = inputField.value;
+
+            if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                inputField.value = '';
+            }
+        });
+    }
+</script>
 
 @endsection

@@ -25,6 +25,11 @@
             <div class="col-md-12 grid-margin">
             <div class="card p-4">
                 <div class="card-body">
+                    @if (session('alert'))
+                    <div class="alert alert-{{ session('alert.type') }}">
+                        {{ session('alert.message') }}
+                    </div>
+                    @endif
                 <form  action="{{route('updateUserStaff', $user->id)}}" method="POST">
                     @csrf
                     <div class="form-group">
@@ -45,6 +50,15 @@
                         </div>
                     @enderror
                     </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Konfirmasi Password</label>
+                        <input type="password" class="form-control w-50 @error('confirm_password') is-invalid @enderror" id="confirm_password" name="confirm_password" required value="{{ old('confirm_password') }}">
+                        @error('confirm_password')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
+                        </div>
                     <div class="form-group">
                     <label for="status">Posisi</label>
                     <select name="status" id="status" class="form-control w-50">

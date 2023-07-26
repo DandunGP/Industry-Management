@@ -15,7 +15,7 @@
                         <div class="col-md-12 grid-margin">
                             <div class="row">
                                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                                    <h3 class="font-weight-bold">Tambah Bill</h3>
+                                    <h3 class="font-weight-bold">Edit Bill</h3>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                                 class="form-control w-25 @error('no_bom') is-invalid @enderror"
                                                 id="no_bom" name="no_bom" required
                                                 value="@if (old('no_bom')) {{ old('no_bom') }} 
-                                                @else {{ $bom->no_bom }} @endif">
+                                                @else {{ $bom->no_bom }} @endif" readonly>
                                             @error('no_bom')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -45,7 +45,7 @@
                                                 class="form-control w-25 @error('bom_code') is-invalid @enderror"
                                                 id="bom_code" name="bom_code" required
                                                 value="@if (old('bom_code')) {{ old('bom_code') }} 
-                                                @else {{ $bom->bom_code }} @endif">
+                                                @else {{ $bom->bom_code }} @endif" readonly>
                                             @error('bom_code')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -84,12 +84,12 @@
                                                         @foreach ($supply as $sp)
                                                             <option value="{{ $sp->id }}"
                                                                 @if ($sp->id == $bm_sp->supply_id) selected @endif>
-                                                                {{ $sp->supply_code }}
+                                                                {{ $sp->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                     <input type="number" name="qty_supply_old[]"
-                                                        class="form-control w-25 mb-2 mx-2" value="{{ $bm_sp->qty }}">
+                                                        class="int-valid form-control w-25 mb-2 mx-2" value="{{ $bm_sp->qty }}">
                                                     @if ($bom->bill_supply->count() > 1)
                                                         <a href="{{ route('deleteBillSupply', $bm_sp->id) }}"
                                                             class="btn">Hapus</a>
@@ -124,7 +124,7 @@
                                         <div class="form-group">
                                             <label for="qty">Qty</label>
                                             <input type="number" name="qty" id="qty"
-                                                class="form-control w-25 @error('qty') is-invalid @enderror" required
+                                                class="int-valid form-control w-25 @error('qty') is-invalid @enderror" required
                                                 value="{{ $bom->qty }}">
                                             @error('qty')
                                                 <div class="invalid-feedback">
@@ -170,6 +170,7 @@
                     inputElement.setAttribute('name', 'qty_supply[]');
                     inputElement.setAttribute('class', 'form-control w-25 mb-2 mx-2');
                     inputElement.setAttribute('type', 'number');
+                    inputElement.addEventListener('input', validateQtySupply);
                     divElement.appendChild(inputElement);
 
                     var deleteButton = document.createElement('button');
@@ -183,11 +184,36 @@
                     selectContainer.appendChild(divElement);
 
                     selectCount++;
+
+                    function validateQtySupply() {
+                        var value = parseFloat(inputElement.value);
+                        console.log(value < 0);
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputElement.value = '';
+                        }
+                    }
                 }
 
                 function removeInput(inputId) {
                     var inputElement = document.getElementById('input' + inputId);
                     inputElement.remove();
+                }
+
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
                 }
             </script>
         @endsection

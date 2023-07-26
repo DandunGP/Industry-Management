@@ -13,7 +13,6 @@ class Incoming extends Model
         'no_bpb',
         'no_po',
         'po_date',
-        'date_of_receipt',
         'supply_id',
         'supplier',
         'address',

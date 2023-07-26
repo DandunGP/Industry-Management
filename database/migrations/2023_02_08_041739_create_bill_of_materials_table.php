@@ -16,8 +16,8 @@ return new class extends Migration
     {
         Schema::create('bill_of_materials', function (Blueprint $table) {
             $table->id();
-            $table->string("no_bom");
-            $table->string("bom_code");
+            $table->string("no_bom")->unique();
+            $table->string("bom_code")->unique();
             $table->string("name");
             $table->string("information");
             $table->foreignIdFor(Warehouse::class);

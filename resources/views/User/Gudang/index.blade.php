@@ -35,9 +35,9 @@
         <div class="card p-4">
           <div class="card-body">
             <div class="d-flex float-right mb-3">
-              <form action="/searchSiswa" method="post">
+              <form action="{{ route('searchUserWarehouse') }}" method="post">
                 @csrf
-                <input type="text" name="search" class="form-control" placeholder="Search" aria-label="Search...">
+                <input type="text" name="keyword" class="form-control" placeholder="Search" aria-label="Search...">
               </form>
             </div>
             @if (session()->has('success'))
@@ -75,7 +75,7 @@
                 <tbody>
                   @if ($user == null)
                     <tr>
-                      <td colspan="4" class="text-center">Tidak ada data pegawai</td>
+                      <td colspan="4" class="text-center">Tidak ada data user</td>
                     </tr>
                   @else
                     @foreach ($user as $us)

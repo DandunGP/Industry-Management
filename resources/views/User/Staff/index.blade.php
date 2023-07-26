@@ -35,9 +35,9 @@
         <div class="card p-4">
           <div class="card-body">
             <div class="d-flex float-right mb-3">
-              <form action="/searchSiswa" method="post">
+              <form action="{{ route('searchUserStaff') }}" method="post">
                 @csrf
-                <input type="text" name="search" class="form-control" placeholder="Search" aria-label="Search...">
+                <input type="text" name="keyword" class="form-control" placeholder="Search" aria-label="Search...">
               </form>
             </div>
             @if (session()->has('success'))

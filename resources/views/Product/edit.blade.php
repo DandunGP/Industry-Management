@@ -29,12 +29,7 @@
                     @csrf
                     <div class="form-group">
                     <label for="product_code">Kode Produk</label>
-                        <div class="input-group mb-2 mr-sm-2 w-25">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">PEPU-</div>
-                            </div>
-                        <input type="text" class="form-control" name="product_code" id="inlineFormInputGroupUsername2" value="{{ substr($product->product_code, 5) }}">
-                        </div>
+                        <input type="text" class="form-control" name="product_code" id="inlineFormInputGroupUsername2" value="{{ $product->product_code }}" readonly>
                     </div>
                     <div class="form-group">
                     <label for="product_name">Nama Produk</label>
@@ -47,7 +42,7 @@
                     </div>
                     <div class="form-group">
                     <label for="qty">Qty</label>
-                    <input type="number" class="form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ $product->qty }}">
+                    <input type="number" class="int-valid form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ $product->qty }}">
                     @error('qty')
                         <div class="invalid-feedback">
                         {{ $message }}
@@ -65,5 +60,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Validation Input Int
+    const intValidation = document.querySelectorAll('.int-valid');
+
+    intValidation.forEach(function(intValid) {
+        intValid.addEventListener('input', validateInput);
+    });
+
+    function validateInput() {
+        intValidation.forEach(function(inputField) {
+            const value = inputField.value;
+
+            if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                inputField.value = '';
+            }
+        });
+    }
+</script>
 
 @endsection

@@ -30,6 +30,8 @@ class LoginController extends Controller
                 }
         }
 
+        session()->flash('alert.message', "username dan password anda salah");
+
         return redirect()->route('login');
     }
 

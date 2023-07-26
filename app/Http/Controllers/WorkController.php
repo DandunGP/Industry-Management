@@ -38,59 +38,141 @@ class WorkController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no_wo' => 'required',
-            'wo_date' => 'required',
             'information' => 'required',
-            'warehouse_id' => 'required',
             'plan_warehouse' => 'required',
-            'type' => 'required',
             'qty_result' => 'required',
             'product_name' => 'required',
         ]);
+        
+        $woLast = WorkOrder::orderBy('no_wo', 'desc')->first();
+        if($woLast){
+            $woLastInt = substr($woLast->no_wo, 3);
 
-        $bill = BillOfMaterial::where('id', $request->bill_of_material_id)->first();
-
-        WorkOrder::create([
-            'no_wo' => $request->no_wo,
-            'wo_date' => $request->wo_date,
-            'qty' => $bill->qty,
-            'information' => $request->information,
-            'bill_of_material_id' => $request->bill_of_material_id,
-            'warehouse_id' => $request->warehouse_id,
-            'plan_warehouse' => $request->plan_warehouse,
-            'type' => $request->type,
-            'qty_result' => $request->qty_result,
-            'amount_cost' => $bill->amount_cost
-        ]);
-
-        $bill_of_material_supply = BillOfMaterialSupply::where('bill_of_material_id', $bill->id)->get();
-
-        foreach ($bill_of_material_supply as $b) {
-            $b->supply->update([
-                'qty' => $b->supply->qty - $b->qty
+            $bill = BillOfMaterial::where('id', $request->bill_of_material_id)->first();
+    
+            WorkOrder::create([
+                'no_wo' => "WO-" . $woLastInt + 1,
+                'qty' => $bill->qty,
+                'information' => $request->information,
+                'bill_of_material_id' => $request->bill_of_material_id,
+                'warehouse_id' => $bill->warehouse_id,
+                'plan_warehouse' => $request->plan_warehouse,
+                'type' => $bill->type_product,
+                'qty_result' => $request->qty_result,
+                'amount_cost' => $bill->amount_cost
             ]);
-        }
+    
+            $bill_of_material_supply = BillOfMaterialSupply::where('bill_of_material_id', $bill->id)->get();
+    
+            //check qty supply
+            foreach ($bill_of_material_supply as $b) {
+                if($b->supply->qty < $bill->qty){
+                    session()->flash('alert.message', "jumlah bahan yang tersedia untuk digunakan tidak mencukupi");
+                    session()->flash('alert.type', "failed");
 
-        $product_check = Product::count();
-        $last_product = Product::select('product_code')->latest()->first();
-        $deleted_string = 'PRO-';
-        $newProductCode = ltrim($last_product->product_code, $deleted_string) + 1;
-
-        if($product_check != 0){
-            Product::create([
-                'product_code' => 'PRO-' . $newProductCode,
-                'product_name' => $request->product_name,
-                'qty' => $request->qty_result
-            ]);
+                    $warehouse = Warehouse::all();
+                    $bom = BillOfMaterial::all();
+                    return view('Work.insert', ['warehouse' => $warehouse, 'bom' => $bom]);
+                }
+            }
+            
+            foreach ($bill_of_material_supply as $b) {
+                $b->supply->update([
+                    'qty' => $b->supply->qty - $b->qty
+                ]);
+            }
+    
+            $product_check = Product::count();
+            $last_product = Product::select('product_code')->latest()->first();
+            $deleted_string = 'PRO-';
+            $newProductCode = ltrim($last_product->product_code, $deleted_string) + 1;
+    
+            if($product_check != 0){
+                $product_exist = Product::where('product_name', $request->product_name)->first();
+                if($product_exist){
+                    $product_exist->update([
+                        'qty' => $product_exist->qty + $request->qty_result
+                    ]);
+                }else{
+                    Product::create([
+                        'product_code' => 'PRO-' . $newProductCode,
+                        'product_name' => $request->product_name,
+                        'qty' => $request->qty_result
+                    ]);
+                }
+            }else{
+                Product::create([
+                    'product_code' => 'PRO-1',
+                    'product_name' => $request->product_name,
+                    'qty' => $request->qty_result
+                ]);
+            }
+    
+            return redirect()->route('workDashboard');
         }else{
-            Product::create([
-                'product_code' => 'PRO-1',
-                'product_name' => $request->product_name,
-                'qty' => $request->qty_result
+            $bill = BillOfMaterial::where('id', $request->bill_of_material_id)->first();
+            
+            WorkOrder::create([
+                'no_wo' => "WO-1",
+                'qty' => $bill->qty,
+                'information' => $request->information,
+                'bill_of_material_id' => $request->bill_of_material_id,
+                'warehouse_id' => $bill->warehouse_id,
+                'plan_warehouse' => $request->plan_warehouse,
+                'type' => $bill->type_product,
+                'qty_result' => $request->qty_result,
+                'amount_cost' => $bill->amount_cost
             ]);
-        }
+    
+            $bill_of_material_supply = BillOfMaterialSupply::where('bill_of_material_id', $bill->id)->get();
+    
+            //check qty supply
+            foreach ($bill_of_material_supply as $b) {
+                if($b->supply->qty < $bill->qty){
+                    session()->flash('alert.message', "jumlah bahan yang tersedia untuk digunakan tidak mencukupi");
+                    session()->flash('alert.type', "failed");
 
-        return redirect()->route('workDashboard');
+                    $warehouse = Warehouse::all();
+                    $bom = BillOfMaterial::all();
+                    return view('Work.insert', ['warehouse' => $warehouse, 'bom' => $bom]);
+                }
+            }
+
+            foreach ($bill_of_material_supply as $b) {
+                $b->supply->update([
+                    'qty' => $b->supply->qty - $b->qty
+                ]);
+            }
+    
+            $product_check = Product::count();
+    
+            if($product_check != 0){
+                $last_product = Product::select('product_code')->latest()->first();
+                $deleted_string = 'PRO-';
+                $newProductCode = ltrim($last_product->product_code, $deleted_string) + 1;
+                
+                $product_exist = Product::where('product_name', $request->product_name)->first();
+                if($product_exist){
+                    $product_exist->update([
+                        'qty' => $product_exist->qty + $request->qty_result
+                    ]);
+                }else{
+                    Product::create([
+                        'product_code' => 'PRO-' . $newProductCode,
+                        'product_name' => $request->product_name,
+                        'qty' => $request->qty_result
+                    ]);
+                }
+            }else{
+                Product::create([
+                    'product_code' => 'PRO-1',
+                    'product_name' => $request->product_name,
+                    'qty' => $request->qty_result
+                ]);
+            }
+    
+            return redirect()->route('workDashboard');
+        }
     }
 
     public function edit($id)
@@ -104,24 +186,14 @@ class WorkController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'no_wo' => 'required',
-            'wo_date' => 'required',
-            'qty' => 'required',
             'information' => 'required',
-            'warehouse_id' => 'required',
             'plan_warehouse' => 'required',
-            'type' => 'required',
             'qty_result' => 'required',
         ]);
 
         WorkOrder::where('id', $id)->update([
-            'no_wo' => $request->no_wo,
-            'wo_date' => $request->wo_date,
-            'qty' => $request->qty,
             'information' => $request->information,
-            'warehouse_id' => $request->warehouse_id,
             'plan_warehouse' => $request->plan_warehouse,
-            'type' => $request->type,
             'qty_result' => $request->qty_result,
         ]);
 

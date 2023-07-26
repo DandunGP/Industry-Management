@@ -17,8 +17,7 @@ return new class extends Migration
     {
         Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
-            $table->string("no_wo");
-            $table->date("wo_date");
+            $table->string("no_wo")->unique();
             $table->string("qty");
             $table->string("information");
             $table->foreignIdFor(Warehouse::class);

@@ -30,30 +30,8 @@
                                             <label for="no_wo">No WO</label>
                                             <input type="text"
                                                 class="form-control w-25 @error('no_wo') is-invalid @enderror"
-                                                id="no_wo" name="no_wo" required value="{{ $work->no_wo }}">
+                                                id="no_wo" name="no_wo" required value="{{ $work->no_wo }}" readonly>
                                             @error('no_wo')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="wo_date">Tanggal WO</label>
-                                            <input type="date"
-                                                class="form-control w-25 @error('wo_date') is-invalid @enderror"
-                                                id="wo_date" name="wo_date" required value="{{ $work->wo_date }}">
-                                            @error('wo_date')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="qty">Qty</label>
-                                            <input type="number"
-                                                class="form-control w-25 @error('qty') is-invalid @enderror" id="qty"
-                                                name="qty" required value="{{ $work->qty }}">
-                                            @error('qty')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -70,20 +48,6 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="warehouse_id">Gudang</label>
-                                            <select name="warehouse_id" id="warehouse" class="form-control w-25">
-                                                @foreach ($warehouse as $wh)
-                                                    @if ($wh->id == $work->warehouse_id)
-                                                        <option value="{{ $wh->id }}" selected>
-                                                            {{ $wh->name }}</option>
-                                                    @else
-                                                        <option value="{{ $wh->id }}">{{ $wh->name }}
-                                                        </option>
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="plan_warehouse">Gudang Rencana</label>
                                             <select name="plan_warehouse" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
@@ -98,20 +62,9 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="type">Tipe Product</label>
-                                            <select name="type" id="type" class="form-control w-25">
-                                                <option value="FG"
-                                                    @if ($work->type == 'FG') selected @else @endif>Finishing Good
-                                                </option>
-                                                <option value="WO"
-                                                    @if ($work->type == 'WO') selected @else @endif>Work Order
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="qty_result">Hasil Qty</label>
                                             <input type="number" name="qty_result" id="qty_result"
-                                                class="form-control w-25 @error('qty_result') is-invalid @enderror" required
+                                                class="int-valid form-control w-25 @error('qty_result') is-invalid @enderror" required
                                                 value="{{ $work->qty_result }}">
                                             @error('qty_result')
                                                 <div class="invalid-feedback">
@@ -130,4 +83,23 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
+                }
+            </script>
         @endsection

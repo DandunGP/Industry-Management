@@ -19,12 +19,15 @@ class WarehouseController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'warehouse_code' => 'required',
             'name' => 'required',
         ]);
 
+        $warehouse = Warehouse::select('*')->orderBy('warehouse_code', 'desc')->first();
+
+        $codeWarehouseInt = substr($warehouse->warehouse_code, 5);
+
         Warehouse::create([
-            'warehouse_code' => "GEPU-" . $request->warehouse_code,
+            'warehouse_code' => "GEPU-" . $codeWarehouseInt + 1,
             'name' => $request->name,
             'information' => $request->information
         ]);
@@ -40,13 +43,11 @@ class WarehouseController extends Controller
 
     public function update(Request $request, $id){
         $request->validate([
-            'warehouse_code' => 'required',
             'name' => 'required',
             'information' => ''
         ]);
 
         Warehouse::where('id', $id)->update([
-            'warehouse_code' => "GEPU-" . $request->warehouse_code,
             'name' => $request->name,
             'information' => $request->information
         ]);

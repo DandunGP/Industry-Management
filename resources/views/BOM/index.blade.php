@@ -87,7 +87,7 @@
                                                     <th scope="col">No</th>
                                                     <th scope="col">No BOM</th>
                                                     <th scope="col">Kode BOM</th>
-                                                    <th scope="col">Kode Supply</th>
+                                                    <th scope="col">Supply</th>
                                                     <th scope="col">Kode Warehouse</th>
                                                     <th scope="col">Nama BOM</th>
                                                     <th scope="col">Tipe Product</th>
@@ -111,10 +111,10 @@
                                                             <td>{{ $bm->bom_code }}</td>
                                                             <td>
                                                                 @foreach ($bm->supply as $sp)
-                                                                    {{ $sp->supply_code }} <br>
+                                                                    {{ $sp->name }} <br>
                                                                 @endforeach
                                                             </td>
-                                                            <td>{{ $bm->warehouse->warehouse_code }}</td>
+                                                            <td>{{ $bm->warehouse->name }}</td>
                                                             <td>{{ $bm->name }}</td>
                                                             <td>{{ $bm->type_product }}</td>
                                                             <td>{{ $bm->qty }}</td>
@@ -127,8 +127,6 @@
                                                             </td>
                                                             <td>{{ $bm->information }}</td>
                                                             <td>
-                                                                <a href="/siswa/{{ $bm->id }}"
-                                                                    class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                                                                 <a href="{{ route('editBill', $bm->id) }}"
                                                                     class="btn btn-warning btn-sm"><i
                                                                         class="ti-pencil-alt"></i></a>

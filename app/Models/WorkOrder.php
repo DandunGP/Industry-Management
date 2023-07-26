@@ -11,7 +11,6 @@ class WorkOrder extends Model
 
     protected $fillable = [
         'no_wo',
-        'wo_date',
         'qty',
         'information',
         'warehouse_id',

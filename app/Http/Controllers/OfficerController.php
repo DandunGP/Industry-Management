@@ -36,44 +36,59 @@ class OfficerController extends Controller
         $user = $request->validate([
             'username' => 'required|string',
             'password' => 'required',
-            'status' => 'required'
+            'confirm_password' => 'required',
         ]);
 
-        User::create([
-            'username' => $user['username'],
-            'password' => Hash::make($user['password']),
-            'status' => $user['status']
-        ]);
+        if($user['password'] == $user['confirm_password']){
+            if($officer['position'] == 'Manager'){
+                $user['status'] = 'Admin';
+            }else if($officer['position'] == 'Staff'){
+                $user['status'] = 'Staff';
+            }else{
+                $user['status'] = 'Gudang';
+            }
 
-        $newUser = User::select('id', 'username')->where('username', '=', $user['username'])->first();
-
-        if($request->officer_picture){
-            $filename = 'profile_picture_'. $newUser->username .'.' . $request->officer_picture->getClientOriginalExtension();
-            
-            Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
-            $path = 'picture_queue/' . $filename;
-            
-            $imageQueue = new UploadOfficerPicture($path);
-            dispatch($imageQueue);
-
-            $imageUrl = $imageQueue->handle();
-
-            Storage::delete('public/' . $path);
+            User::create([
+                'username' => $user['username'],
+                'password' => Hash::make($user['password']),
+                'status' => $user['status']
+            ]);
+    
+            $newUser = User::select('id', 'username')->where('username', '=', $user['username'])->first();
+    
+            if($request->officer_picture){
+                $filename = 'profile_picture_'. $newUser->username .'.' . $request->officer_picture->getClientOriginalExtension();
+                
+                Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
+                $path = 'picture_queue/' . $filename;
+                
+                $imageQueue = new UploadOfficerPicture($path);
+                dispatch($imageQueue);
+    
+                $imageUrl = $imageQueue->handle();
+    
+                Storage::delete('public/' . $path);
+            }
+    
+            Officer::create([
+                'name' => $officer['name'],
+                'nik' => $officer['nik'],
+                'date_of_birth' => $officer['dob'],
+                'gender' => $officer['gender'],
+                'address' => $officer['address'],
+                'phone' => $officer['phone'],
+                'officer_picture' => $imageUrl ?? "",
+                'position' => $officer['position'],
+                'user_id' => $newUser->id,
+            ]);
+    
+            return redirect()->route('officerDashboard');
         }
 
-        Officer::create([
-            'name' => $officer['name'],
-            'nik' => $officer['nik'],
-            'date_of_birth' => $officer['dob'],
-            'gender' => $officer['gender'],
-            'address' => $officer['address'],
-            'phone' => $officer['phone'],
-            'officer_picture' => $imageUrl ?? "",
-            'position' => $officer['position'],
-            'user_id' => $newUser->id,
-        ]);
+        session()->flash('alert.message', "confirm password doesn't match");
+        session()->flash('alert.type', "failed");
 
-        return redirect()->route('officerDashboard');
+        return view('Officer.insert');
     }
 
     public function edit($id){
@@ -97,46 +112,63 @@ class OfficerController extends Controller
         $user = $request->validate([
             'username' => 'required|string',
             'password' => 'required',
-            'status' => 'required'
+            'confirm_password' => 'required'
         ]);
 
-        $checkOfficer = Officer::with(['user' => function($queryUser){
-            $queryUser->select('id', 'username');
-        }])->select('user_id', 'officer_picture')->where('id', $id)->first();
+        if($user['password'] == $user['confirm_password']){
+            if($officer['position'] == 'Manager'){
+                $user['status'] = 'Admin';
+            }else if($officer['position'] == 'Staff'){
+                $user['status'] = 'Staff';
+            }else{
+                $user['status'] = 'Gudang';
+            }
 
-        if($request->officer_picture){
-            $filename = 'profile_picture_'. $checkOfficer->user->username .'.' . $request->officer_picture->getClientOriginalExtension();
-            
-            Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
-            $path = 'picture_queue/' . $filename;
-            
-            $imageQueue = new UploadOfficerPicture($path);
-            dispatch($imageQueue);
-
-            $imageUrl = $imageQueue->handle();
-
-            Storage::delete('public/' . $path);
+            $checkOfficer = Officer::with(['user' => function($queryUser){
+                $queryUser->select('id', 'username');
+            }])->select('user_id', 'officer_picture')->where('id', $id)->first();
+    
+            if($request->officer_picture){
+                $filename = 'profile_picture_'. $checkOfficer->user->username .'.' . $request->officer_picture->getClientOriginalExtension();
+                
+                Storage::putFileAs('public/picture_queue', $request->officer_picture, $filename);
+                $path = 'picture_queue/' . $filename;
+                
+                $imageQueue = new UploadOfficerPicture($path);
+                dispatch($imageQueue);
+    
+                $imageUrl = $imageQueue->handle();
+    
+                Storage::delete('public/' . $path);
+            }
+    
+            Officer::where('id', $id)->update([
+                'name' => $officer['name'],
+                'nik' => $officer['nik'],
+                'date_of_birth' => $officer['dob'],
+                'gender' => $officer['gender'],
+                'address' => $officer['address'],
+                'phone' => $officer['phone'],
+                'officer_picture' => $imageUrl ?? $checkOfficer->officer_picture,
+                'position' => $officer['position'],
+            ]);
+    
+            $officerData = Officer::select('user_id')->where('id', $id)->first();
+            User::where('id', $officerData->user_id)->update([
+                'username' => $user['username'],
+                'password' => Hash::make($user['password']),
+                'status' => $user['status'],
+            ]);
+    
+            return redirect()->route('officerDashboard');
         }
 
-        Officer::where('id', $id)->update([
-            'name' => $officer['name'],
-            'nik' => $officer['nik'],
-            'date_of_birth' => $officer['dob'],
-            'gender' => $officer['gender'],
-            'address' => $officer['address'],
-            'phone' => $officer['phone'],
-            'officer_picture' => $imageUrl ?? $checkOfficer->officer_picture,
-            'position' => $officer['position'],
-        ]);
+        session()->flash('alert.message', "confirm password doesn't match");
+        session()->flash('alert.type', "failed");
 
-        $officerData = Officer::select('user_id')->where('id', $id)->first();
-        User::where('id', $officerData->user_id)->update([
-            'username' => $user['username'],
-            'password' => Hash::make($user['password']),
-            'status' => $user['status'],
-        ]);
-
-        return redirect()->route('officerDashboard');
+        $officer = Officer::select('*')->where('id', $id)->first();
+        $user = User::select('*')->where('id', $officer->user_id)->first();
+        return view('Officer.edit', [ 'officer' => $officer, 'user' => $user ]);
     }
 
     public function delete($id){

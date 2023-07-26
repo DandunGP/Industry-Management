@@ -7,10 +7,9 @@ body{
 }
 
 .auth-background{
-    width: 26.875em;
-    height: 34.125em;
-    filter: blur(0.5px);
-    -webkit-filter: blur(0.5px);
+    width: 29.875em;
+    height: 25.875em;
+    padding-right: 4em;
 }
     
 @media (min-width: 768px) {

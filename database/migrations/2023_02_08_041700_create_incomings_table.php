@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string("no_bpb");
             $table->string("no_po");
             $table->string("po_date");
-            $table->string("date_of_receipt");
             $table->string("address");
             $table->string("supplier");
             $table->string("no_sj_supplier");

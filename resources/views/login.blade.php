@@ -11,15 +11,15 @@
             <div class="row g-0">
               <div class="col-lg-6">
                 <div class="card-body p-md-5 mx-md-4">
-                    <div class="text-center">
-                        <img src="<?= asset('images/logo.png') ?>"
-                        style="width: 185px;" alt="logo">
-                    </div>
-
-                    <form action="{{ route('loginAuth') }}" method="POST">
-                      @csrf
-                        <div class="form-outline mb-4">
-                            <label class="form-label" for="username">Username</label>
+                  <form action="{{ route('loginAuth') }}" method="POST">
+                    @csrf
+                    @if (session('alert'))
+                  <div class="alert alert-danger">
+                      {{ session('alert.message') }}
+                  </div>
+                  @endif
+                    <div class="form-outline mb-4">
+                            <label class="form-label pt-5 mt-3" for="username">Username</label>
                             <input type="text" name="username" id="username" class="form-control"
                                 placeholder="Enter your username" />
                         </div>
@@ -39,7 +39,7 @@
                 </div>
               </div>
               <div class="col-lg-6 d-flex align-items-center">
-                <img src="<?= asset('images/auth-back.png') ?>" class="auth-background" alt="img-auth">
+                <img src="<?= asset('images/logo.png') ?>" class="auth-background" alt="img-auth">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                 </div>
               </div>

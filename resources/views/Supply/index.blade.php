@@ -125,8 +125,6 @@
                                                             <td>{{ $sp->purchase_price }}</td>
                                                             <td>{{ $sp->selling_price }}</td>
                                                             <td>
-                                                                <a href="/siswa/{{ $sp->id }}"
-                                                                    class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                                                                 <a href="{{ route('editSupply', $sp->id) }}"
                                                                     class="btn btn-warning btn-sm"><i
                                                                         class="ti-pencil-alt"></i></a>
@@ -146,20 +144,9 @@
                                             {{ $supply->links() }}
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
-                                        <div class="col-3">
-                                            <h6>Print Laporan Supply</h6>
-                                        </div>
-                                    </div>
                                     <form action="{{ route('printSupply') }}" method="post">
                                         @csrf
                                         <div class="row align-items-center">
-                                            <div class="col-3">
-                                                <input type="date" name="tanggal1" class="form-control">
-                                            </div>
-                                            <div class="col-3">
-                                                <input type="date" name="tanggal2" class="form-control">
-                                            </div>
                                             <div class="col-6">
                                                 <button type="submit" class="btn btn-primary">Print PDF</button>
                                             </div>

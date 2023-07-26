@@ -7,7 +7,9 @@ use App\Models\Incoming;
 use App\Models\Officer;
 use App\Models\Product;
 use App\Models\Supply;
+use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\WorkOrder;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -26,6 +28,30 @@ class SearchController extends Controller
         }
 
         return view('Officer.index', ['officer' => $data]);
+    }
+
+    public function searchUserStaff(Request $request){
+        if ($request->has('keyword')) {
+            $data = User::where('username', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('status', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = User::where('status', 'Staff')->paginate(25);
+        }
+
+        return view('User.Staff.index', ['user' => $data]);
+    }
+
+    public function searchUserWarehouse(Request $request){
+        if ($request->has('keyword')) {
+            $data = User::where('username', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('status', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = User::where('status', 'Gudang')->paginate(25);
+        }
+
+        return view('User.Gudang.index', ['user' => $data]);
     }
 
     public function searchWarehouse(Request $request){
@@ -59,7 +85,6 @@ class SearchController extends Controller
             $data = Incoming::where('no_bpb', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('no_po', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('po_date', 'LIKE', "%{$request->keyword}%")
-                ->orWhere('date_of_receipt', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('supplier', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('address', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('no_sj_supplier', 'LIKE', "%{$request->keyword}%")
@@ -99,16 +124,49 @@ class SearchController extends Controller
                 ->orWhere('bom_code', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('name', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('information', 'LIKE', "%{$request->keyword}%")
-                ->orWhere('supply_id', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('warehouse_id', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('type_product', 'LIKE', "%{$request->keyword}%")
                 ->orWhere('qty', 'LIKE', "%{$request->keyword}%")
-                ->orWhere('amount_cost', 'LIKE', "%{$request->keyword}%")
                 ->paginate(25);
         } else {
             $data = BillOfMaterial::paginate(25);
         }
 
-        return view('BOM.index', ['bom' => $data]);
+        $amount = 0;
+        $amounts = array();
+        foreach ($data as $bom) {
+            foreach ($bom->bill_supply as $bm) {
+                $amount += $bm->supply->purchase_price * $bm->qty;
+            }
+            array_push($amounts, $amount);
+            $amount = 0;
+        }
+
+        return view('BOM.index', ['bom' => $data, 'amounts' => $amounts]);
+    }
+
+    public function searchWork(Request $request){
+        if ($request->has('keyword')) {
+            $data = WorkOrder::where('no_wo', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('qty', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('information', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('type', 'LIKE', "%{$request->keyword}%")
+                ->orWhere('qty_result', 'LIKE', "%{$request->keyword}%")
+                ->paginate(25);
+        } else {
+            $data = WorkOrder::paginate(25);
+        }
+
+        $amount = 0;
+        $amounts = array();
+        foreach ($data as $wo) {
+            foreach ($wo->billOfMaterial->bill_supply as $bm) {
+                $amount += $bm->supply->purchase_price * $bm->qty;
+            }
+            array_push($amounts, $amount);
+            $amount = 0;
+        }
+
+        return view('Work.index', ['work' => $data, 'amounts' => $amounts]);
     }
 }

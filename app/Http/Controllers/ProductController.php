@@ -23,13 +23,15 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_code' => 'required|string',
             'product_name' => 'required|string',
             'qty' => 'required',
         ]);
 
+        $product_last = Product::orderBy('product_code', 'desc')->first();
+        $productCodeInt = substr($product_last->product_code, 4);
+
         Product::create([
-            'product_code' => "PEPU-" . $request->product_code,
+            'product_code' => "PRO-" . $productCodeInt + 1,
             'product_name' => $request->product_name,
             'qty' => $request->qty,
         ]);
@@ -46,13 +48,11 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'product_code' => 'required|string',
             'product_name' => 'required|string',
             'qty' => 'required',
         ]);
 
         Product::where('id', $id)->update([
-            'product_code' => "PEPU-" . $request->product_code,
             'product_name' => $request->product_name,
             'qty' => $request->qty,
         ]);

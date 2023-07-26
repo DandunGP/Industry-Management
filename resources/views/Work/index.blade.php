@@ -86,6 +86,7 @@
                                                 <tr>
                                                     <th scope="col">No</th>
                                                     <th scope="col">No WO</th>
+                                                    <th scope="col">Nama Work Order</th>
                                                     <th scope="col">Tanggal WO</th>
                                                     <th scope="col">Qty</th>
                                                     <th scope="col">Informasi</th>
@@ -100,19 +101,19 @@
                                             <tbody>
                                                 @if ($work[0] == null)
                                                     <tr>
-                                                        <td colspan="12" class="text-center">Tidak ada data bill of
-                                                            materials</td>
+                                                        <td colspan="12" class="text-center">Tidak ada data work order</td>
                                                     </tr>
                                                 @else
                                                     @foreach ($work as $index_wo => $wo)
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $wo->no_wo }}</td>
-                                                            <td>{{ $wo->wo_date }}</td>
+                                                            <td>{{ $wo->billOfMaterial->name }}</td>
+                                                            <td>{{ date('j F Y', strtotime($wo->created_at)) }}</td>
                                                             <td>{{ $wo->qty }}</td>
                                                             <td>{{ $wo->information }}</td>
-                                                            <td>{{ $wo->warehouse->warehouse_code }}</td>
-                                                            <td>{{ $wo->planWarehouse->warehouse_code }}</td>
+                                                            <td>{{ $wo->warehouse->name }}</td>
+                                                            <td>{{ $wo->planWarehouse->name }}</td>
                                                             <td>{{ $wo->type }}</td>
                                                             <td>{{ $wo->qty_result }}</td>
                                                             <td>
@@ -123,8 +124,6 @@
                                                                 @endforeach
                                                             </td>
                                                             <td>
-                                                                <a href="/siswa/{{ $wo->id }}"
-                                                                    class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                                                                 <a href="{{ route('editWork', $wo->id) }}"
                                                                     class="btn btn-warning btn-sm"><i
                                                                         class="ti-pencil-alt"></i></a>

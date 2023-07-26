@@ -25,6 +25,11 @@
             <div class="col-md-12 grid-margin">
             <div class="card p-4">
                 <div class="card-body">
+                @if (session('alert'))
+                <div class="alert alert-{{ session('alert.type') }}">
+                    {{ session('alert.message') }}
+                </div>
+                @endif
                 <form  action="{{route('storeOfficer')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
@@ -47,7 +52,7 @@
                     </div>
                     <div class="form-group">
                     <label for="dob">Tanggal Lahir</label>
-                    <input type="date" class="form-control w-25 @error('dob') is-invalid @enderror" id="dob" name="dob" required value="{{ old('dob') }}">
+                    <input type="date" id="date-input" class="form-control w-25 @error('dob') is-invalid @enderror" id="dob" name="dob" required value="{{ old('dob') }}">
                     @error('dob')
                         <div class="invalid-feedback">
                         {{ $message }}
@@ -104,16 +109,15 @@
                         </div>
                     @enderror
                     </div>
-                    @if(Auth::user()->status == 'Admin')
                     <div class="form-group">
-                    <label for="status">Posisi</label>
-                    <select name="status" id="status" class="form-control w-50">
-                        <option value="Admin" class="form-control">Admin</option>
-                        <option value="Staff" class="form-control" selected>Staff</option>
-                        <option value="Gudang" class="form-control">Gudang</option>
-                    </select>
-                    </div>
-                    @endif
+                        <label for="confirm_password">Konfirmasi Password</label>
+                        <input type="password" class="form-control w-50 @error('confirm_password') is-invalid @enderror" id="confirm_password" name="confirm_password" required value="{{ old('confirm_password') }}">
+                        @error('confirm_password')
+                            <div class="invalid-feedback">
+                            {{ $message }}
+                            </div>
+                        @enderror
+                        </div>
                     <div class="mt-3">
                     <a href="{{route('officerDashboard')}}" class="btn btn-primary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -125,5 +129,46 @@
         </div>
     </div>
 </div>
+
+<script>
+var dateInput = document.getElementById('date-input');
+
+var currentDate = new Date();
+
+var minDate = new Date();
+minDate.setFullYear(currentDate.getFullYear() - 17);
+
+dateInput.max = minDate.toISOString().split('T')[0];
+
+dateInput.addEventListener('input', function() {
+  var inputDate = new Date(dateInput.value);
+
+  if (inputDate > minDate) {
+    dateInput.value = '';
+    alert('Please select a date that is at least 17 years ago.');
+  }
+});
+
+// Password Validation
+// const passwordInput = document.getElementById('password');
+// const confirmInput = document.getElementById('confirm_password');
+// const passwordMessage = document.getElementById('password-message');
+
+// // Add an input event listener to the second password input field
+// password2Input.addEventListener('input', validatePasswords);
+
+// function validatePasswords() {
+// // Get the values of both password inputs
+// const password1 = password1Input.value;
+// const password2 = password2Input.value;
+
+// // Check if the passwords match
+// if (password1 === password2) {
+//     passwordMessage.textContent = 'Passwords match';
+// } else {
+//     passwordMessage.textContent = 'Passwords do not match';
+// }
+// }
+// </script>
 
 @endsection

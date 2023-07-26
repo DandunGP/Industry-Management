@@ -29,12 +29,7 @@
                     @csrf
                     <div class="form-group">
                     <label for="name">Kode Gudang</label>
-                    <div class="input-group mb-2 mr-sm-2">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">GEPU-</div>
-                        </div>
-                        <input type="text" class="form-control" name="warehouse_code" id="inlineFormInputGroupUsername2" value="{{ substr($warehouse->warehouse_code, 5) }}">
-                    </div>
+                    <input type="text" class="form-control" name="warehouse_code" id="inlineFormInputGroupUsername2" value="{{ $warehouse->warehouse_code }}" readonly>
                     @error('name')
                         <div class="invalid-feedback">
                         {{ $message }}

@@ -115,7 +115,7 @@
                                         <div class="form-group">
                                             <label for="qty">Jumlah Supply</label>
                                             <input type="number"
-                                                class="form-control w-25 @error('qty') is-invalid @enderror" id="qty"
+                                                class="int-valid form-control w-25 @error('qty') is-invalid @enderror" id="qty"
                                                 name="qty" required value="{{ $supply->qty }}">
                                             @error('qty')
                                                 <div class="invalid-feedback">
@@ -135,7 +135,7 @@
                                             <div class="form-group">
                                                 <label for="purchase_price">Harga Beli</label>
                                                 <input type="number" name="purchase_price" id="purchase_price"
-                                                    class="form-control w-25 @error('purchase_price') is-invalid @enderror"
+                                                    class="int-valid form-control w-25 @error('purchase_price') is-invalid @enderror"
                                                     required value="{{ $supply->purchase_price }}">
                                                 @error('purchase_price')
                                                     <div class="invalid-feedback">
@@ -146,7 +146,7 @@
                                             <div class="form-group">
                                                 <label for="selling_price">Harga Jual</label>
                                                 <input type="number" name="selling_price" id="selling_price"
-                                                    class="form-control w-25 @error('selling_price') is-invalid @enderror"
+                                                    class="int-valid form-control w-25 @error('selling_price') is-invalid @enderror"
                                                     required value="{{ $supply->selling_price }}">
                                                 @error('selling_price')
                                                     <div class="invalid-feedback">
@@ -166,4 +166,22 @@
                     </div>
                 </div>
             </div>
+            <script>
+                // Validation Input Int
+                const intValidation = document.querySelectorAll('.int-valid');
+
+                intValidation.forEach(function(intValid) {
+                    intValid.addEventListener('input', validateInput);
+                });
+
+                function validateInput() {
+                    intValidation.forEach(function(inputField) {
+                        const value = inputField.value;
+
+                        if (value <= 0 || Math.floor(value) !== parseFloat(value)) {
+                            inputField.value = '';
+                        }
+                    });
+                }
+            </script>
         @endsection

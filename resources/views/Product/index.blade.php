@@ -104,8 +104,6 @@
                                                             <td>{{ $pd->product_name }}</td>
                                                             <td>{{ $pd->qty }}</td>
                                                             <td>
-                                                                <a href="/siswa/{{ $pd->id }}"
-                                                                    class="btn btn-info btn-sm"><i class="ti-eye"></i></a>
                                                                 <a href="{{ route('editProduct', $pd->id) }}"
                                                                     class="btn btn-warning btn-sm"><i
                                                                         class="ti-pencil-alt"></i></a>
@@ -125,17 +123,9 @@
                                             {{ $product->links() }}
                                         </div>
                                     </div>
-                                    <div class="row mt-3">
-                                        <div class="col-3">
-                                            <h6>Print Laporan Product</h6>
-                                        </div>
-                                    </div>
                                     <form action="{{ route('printProduct') }}" method="post">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-3">
-                                                <input type="date" name="tanggal" class="form-control">
-                                            </div>
                                             <div class="col-9">
                                                 <button type="submit" class="btn btn-primary">Print PDF</button>
                                             </div>

@@ -4,8 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col text-center">
-                <h3>Laporan Supply</h3>
-                <h6>{{ $date }}</h6>
+                <h3>Laporan Produk</h3>
             </div>
         </div>
         <div class="row mt-5">

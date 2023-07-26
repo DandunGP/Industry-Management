@@ -11,6 +11,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WorkController;
+use App\Models\BillOfMaterial;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +26,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
-Route::post('/login', [LoginController::class, 'authentication'])->name('loginAuth')->middleware('guest');
+Route::get('/', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/', [LoginController::class, 'authentication'])->name('loginAuth')->middleware('guest');
 
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
@@ -39,6 +40,9 @@ Route::prefix('user')->group(function () {
         Route::get('/', [AdminController::class, 'getUserStaff'])->middleware('checkAdmin')->name('staffDashboard');
         Route::get('/edit-user/{id}', [AdminController::class, 'editUserStaff'])->middleware('checkAdmin')->name('editUserStaff');
         Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserStaff'])->middleware('checkAdmin')->name('updateUserStaff');
+
+        // Search Feature
+        Route::post('/search', [SearchController::class, 'searchUserStaff'])->name('searchUserStaff');
     });
 
     // Gudang
@@ -46,6 +50,9 @@ Route::prefix('user')->group(function () {
         Route::get('/', [AdminController::class, 'getUserWarehouse'])->middleware('checkAdmin')->name('warehouseDashboard');
         Route::get('/edit-user/{id}', [AdminController::class, 'editUserWarehouse'])->middleware('checkAdmin')->name('editUserWarehouse');
         Route::post('/edit-user/{id}/update', [AdminController::class, 'updateUserWarehouse'])->middleware('checkAdmin')->name('updateUserWarehouse');
+
+        // Search Feature
+        Route::post('/search', [SearchController::class, 'searchUserWarehouse'])->name('searchUserWarehouse');
     });
 });
 
@@ -130,6 +137,7 @@ Route::prefix('bill-of-materials')->group(function () {
     Route::delete('/delete/{id}', [BillController::class, 'delete'])->name('deleteBill')->middleware('checkAdminStaff');
     Route::get('/delete-bill-of-materials-supply/{id}', [BillController::class, 'deleteSupply'])->name('deleteBillSupply')->middleware('checkAdminStaff');
 
+    Route::post('/print-pdf', [BillOfMaterial::class, 'printPDF'])->name('printBOM')->middleware('checkAdminStaff');
 
     // Search Feature
     Route::post('/search', [SearchController::class, 'searchBill'])->name('searchBill');
@@ -152,6 +160,14 @@ Route::prefix('work-order')->group(function () {
 
 
 Route::get('/storage-link', function () {
-    Artisan::call('storage:link');
-    return 'Storage link created successfully.';
+   $command = 'php artisan storage:link';
+    $output = null;
+    $status = null;
+    exec($command, $output, $status);
+    
+    if ($status === 0) {
+        return 'Storage link created successfully!';
+    } else {
+        return 'Failed to create storage link.';
+    }
 });
