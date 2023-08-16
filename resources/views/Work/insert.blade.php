@@ -32,7 +32,7 @@
                                         </div>
                                         @endif
                                         <div class="form-group">
-                                            <label for="bill_of_material_id">Bill Of Materials</label>
+                                            <label for="bill_of_material_id">Bill Of Materials<span class="text-danger">(*)</span></label>
                                             <select name="bill_of_material_id" id="bom" class="form-control w-25">
                                                 @foreach ($bom as $bm)
                                                     <option value="{{ $bm->id }}">{{ $bm->name }}</option>
@@ -50,7 +50,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="plan_warehouse">Gudang Rencana</label>
+                                            <label for="plan_warehouse">Gudang Rencana<span class="text-danger">(*)</span></label>
                                             <select name="plan_warehouse" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
                                                     <option value="{{ $wh->id }}">{{ $wh->name }}</option>
@@ -58,7 +58,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="product_name">Nama Produk</label>
+                                            <label for="product_name">Nama Produk<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-25 @error('product_name') is-invalid @enderror"
                                                 id="product_name" name="product_name" required>
@@ -69,7 +69,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty_result">Hasil Qty</label>
+                                            <label for="qty_result">Hasil Qty<span class="text-danger">(*)</span></label>
                                             <input type="number" name="qty_result" id="qty_result"
                                                 class="int-valid form-control w-25 @error('qty_result') is-invalid @enderror" required
                                                 value="{{ old('qty_result') }}">
@@ -90,6 +90,7 @@
                                                 </div>
                                             @enderror
                                         </div> --}}
+                                        <span class="text-danger">(*)</span> Kolom wajib di isi
                                         <div class="mt-3">
                                             <a href="{{ route('workDashboard') }}" class="btn btn-primary">Kembali</a>
                                             <button type="submit" class="btn btn-success">Simpan</button>

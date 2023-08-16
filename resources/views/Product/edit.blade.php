@@ -28,11 +28,11 @@
                 <form  action="{{route('updateProduct', $product->id)}}" method="POST">
                     @csrf
                     <div class="form-group">
-                    <label for="product_code">Kode Produk</label>
+                    <label for="product_code">Kode Produk<span class="text-danger">(*)</span></label>
                         <input type="text" class="form-control" name="product_code" id="inlineFormInputGroupUsername2" value="{{ $product->product_code }}" readonly>
                     </div>
                     <div class="form-group">
-                    <label for="product_name">Nama Produk</label>
+                    <label for="product_name">Nama Produk<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control w-50 @error('product_name') is-invalid @enderror" id="product_name" name="product_name" required value="{{ $product->product_name }}">
                     @error('product_name')
                         <div class="invalid-feedback">
@@ -41,7 +41,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="qty">Qty</label>
+                    <label for="qty">Qty<span class="text-danger">(*)</span></label>
                     <input type="number" class="int-valid form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ $product->qty }}">
                     @error('qty')
                         <div class="invalid-feedback">

@@ -12,6 +12,7 @@ use App\Http\Controllers\SupplyController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WorkController;
 use App\Models\BillOfMaterial;
+use App\Models\Officer;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,12 @@ Route::post('/', [LoginController::class, 'authentication'])->name('loginAuth')-
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard')->middleware('auth');
+
+Route::get('/setting/{id}', [OfficerController::class, 'settingUser'])->name('settingUser')->middleware('auth');
+
+Route::get('/setting/edit/{id}', [OfficerController::class, 'settingUserEdit'])->name('settingUserEdit')->middleware('auth');
+
+Route::post('/setting/edit/{id}/update', [OfficerController::class, 'settingUserStore'])->name('settingUserStore')->middleware('auth');
 
 // User CRUD
 Route::prefix('user')->group(function () {

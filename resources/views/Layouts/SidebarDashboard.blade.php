@@ -66,6 +66,12 @@
                 <span class="menu-title">Produk</span>
             </a>
         </li>   
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('settingUser', Auth::user()->id) }}">
+                <i class="ti-harddrives menu-icon"></i>
+                <span class="menu-title">Pengaturan</span>
+            </a>
+        </li>   
         @endif
     </ul>
 </nav>

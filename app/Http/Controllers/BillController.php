@@ -68,6 +68,9 @@ class BillController extends Controller
                     if ($index_sp == $index) {
                         $sp_qty = Supply::where('id', $sp)->first();
                         if ($sp_qty->qty < $qty_sp) {
+                            session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupi");
+                            session()->flash('alert.type', "failed");
+                            
                             return back();
                         }
                     }
@@ -111,6 +114,9 @@ class BillController extends Controller
                     if ($index_sp == $index) {
                         $sp_qty = Supply::where('id', $sp)->first();
                         if ($sp_qty->qty < $qty_sp) {
+                            session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupi");
+                            session()->flash('alert.type', "failed");
+                            
                             return back();
                         }
                     }
@@ -175,6 +181,9 @@ class BillController extends Controller
                                 'qty' => $qty_new
                             ]);
                         } else {
+                            session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupi");
+                            session()->flash('alert.type', "failed");
+                            
                             return back();
                         }
                     }
@@ -182,7 +191,19 @@ class BillController extends Controller
             } else {
                 foreach ($request->supply_id_old as $key => $supply_id_new) {
                     if ($key == $index_bs) {
-                        $bs->update(['supply_id' => $supply_id_new]);
+                        $checkQty = Supply::where('id', $supply_id_new)->first();
+                        foreach ($request->qty_supply_old as $key => $qty_new) {
+                            if ($key == $index_bs) {
+                                if($checkQty->qty < $qty_new){
+                                    session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupi");
+                                    session()->flash('alert.type', "failed");
+                                    
+                                    return back();
+                                }
+
+                                $bs->update(['supply_id' => $supply_id_new]);
+                            }
+                        }
                     }
                 }
                 foreach ($request->qty_supply_old as $key => $qty_new) {
@@ -192,6 +213,9 @@ class BillController extends Controller
                                 'qty' => $qty_new
                             ]);
                         } else {
+                            session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupiss");
+                            session()->flash('alert.type', "failed");
+                            
                             return back();
                         }
                     }
@@ -212,6 +236,9 @@ class BillController extends Controller
                     if ($index_sp == $index) {
                         $sp_qty = Supply::where('id', $sp)->first();
                         if ($sp_qty->qty < $qty_sp) {
+                            session()->flash('alert.message', "persediaan barang yang digunakan tidak mencukupi");
+                            session()->flash('alert.type', "failed");
+                            
                             return back();
                         }
                     }

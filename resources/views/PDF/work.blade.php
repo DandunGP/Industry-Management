@@ -43,12 +43,21 @@
                             <td>
                                 @foreach ($amounts as $index_amount => $amount)
                                     @if ($index_wo == $index_amount)
-                                        {{ $amount }}
+                                        {{ 'Rp.' . number_format($amount, 0, ',', '.') }}
                                     @endif
                                 @endforeach
                             </td>
                         </tr>
                     @endforeach
+                    @php
+                        $totalAmount = array_sum($amounts);
+                        $numColumns = 11;
+                    @endphp
+                    
+                    <tr class="text-center">
+                        <td colspan="{{ $numColumns - 1 }}"><b>Total Biaya:</b></td>
+                        <td><b>Rp. {{ number_format($totalAmount, 0, ',', '.') }}</b></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -26,8 +26,13 @@
                                 <div class="card-body">
                                     <form action="{{ route('storeBill') }}" method="POST">
                                         @csrf
+                                        @if (session('alert'))
+                                        <div class="alert alert-{{ session('alert.type') }}">
+                                            {{ session('alert.message') }}
+                                        </div>
+                                        @endif
                                         <div class="form-group">
-                                            <label for="name">Nama Bill</label>
+                                            <label for="name">Nama Bill<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-50 @error('name') is-invalid @enderror" id="name"
                                                 name="name" required value="{{ old('name') }}">
@@ -48,7 +53,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="supply">Supply Code</label>
+                                            <label for="supply">Supply Code<span class="text-danger">(*)</span></label>
                                             <div id="input-supply">
                                                 {{-- input --}}
                                             </div>
@@ -56,7 +61,7 @@
                                                 Select</button>
                                         </div>
                                         <div class="form-group">
-                                            <label for="warehouse">Warehouse Code</label>
+                                            <label for="warehouse">Warehouse Code<span class="text-danger">(*)</span></label>
                                             <select name="warehouse_id" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
                                                     <option value="{{ $wh->id }}">{{ $wh->name }}</option>
@@ -64,14 +69,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="type">Tipe Product</label>
+                                            <label for="type">Tipe Product<span class="text-danger">(*)</span></label>
                                             <select name="type_product" id="type" class="form-control w-25">
                                                 <option value="FG">Finishing Good</option>
                                                 <option value="WO">Work Order</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty">Qty</label>
+                                            <label for="qty">Qty<span class="text-danger">(*)</span></label>
                                             <input type="number" name="qty" id="qty"
                                                 class="int-valid form-control w-25 @error('qty') is-invalid @enderror" required
                                                 value="{{ old('qty') }}">
@@ -81,6 +86,7 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <span class="text-danger">(*)</span> Kolom wajib di isi
                                         <div class="mt-3">
                                             <a href="{{ route('billDashboard') }}" class="btn btn-primary">Kembali</a>
                                             <button type="submit" class="btn btn-success">Simpan</button>
@@ -132,7 +138,7 @@
 
                     selectContainer.appendChild(divElement);
 
-                    selectCount++;
+                    count++;
 
                     function validateQtySupply() {
                         var value = parseFloat(inputElement.value);

@@ -73,13 +73,14 @@
                     <th scope="col">Kode Gudang</th>
                     <th scope="col">Nama Gudang</th>
                     <th scope="col">Informasi</th>
+                    {{-- <th scope="col">Kapasitas</th> --}}
                     <th scope="col">Keterangan</th>
                   </tr>
                 </thead>
                 <tbody>
                   @if ($warehouse[0] == null)
                     <tr>
-                      <td colspan="5" class="text-center">Tidak ada data gudang</td>
+                      <td colspan="6" class="text-center">Tidak ada data gudang</td>
                     </tr>
                   @else
                     @foreach ($warehouse as $wh)
@@ -87,6 +88,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $wh->warehouse_code }}</td>
                         <td>{{ $wh->name }}</td>
+                        {{-- <td>{{ $wh->Kapasitas }}</td> --}}
                         <td>{{ $wh->information }}</td>
                         <td>
                           <a href="{{route('editWarehouse', $wh->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil-alt"></i></a>

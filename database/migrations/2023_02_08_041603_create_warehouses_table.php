@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("warehouse_code")->unique();
             $table->string("name");
-            $table->string("information"); 
+            $table->string("information");
             $table->timestamps();
         });
     }

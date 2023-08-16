@@ -28,7 +28,7 @@
                 <form  action="{{route('updateIncoming', $incoming->id)}}" method="POST">
                     @csrf
                     <div class="form-group">
-                    <label for="no_bpb">No BPB</label>
+                    <label for="no_bpb">No BPB<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control w-25 @error('no_bpb') is-invalid @enderror" id="no_bpb" name="no_bpb" required value="{{ $incoming->no_bpb }}">
                     @error('no_bpb')
                         <div class="invalid-feedback">
@@ -37,7 +37,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="no_po">No PO</label>
+                    <label for="no_po">No PO<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control w-25 @error('no_po') is-invalid @enderror" id="no_po" name="no_po" required value="{{ $incoming->no_po }}">
                     @error('no_po')
                         <div class="invalid-feedback">
@@ -46,7 +46,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="po_date">Tanggal PO</label>
+                    <label for="po_date">Tanggal PO<span class="text-danger">(*)</span></label>
                     <input type="date" class="form-control w-25 @error('po_date') is-invalid @enderror" id="po_date" name="po_date" required value="{{ $incoming->po_date }}">
                     @error('po_date')
                         <div class="invalid-feedback">
@@ -55,7 +55,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="supplier">Supplier</label>
+                    <label for="supplier">Supplier<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control @error('supplier') is-invalid @enderror" id="supplier" name="supplier" required value="{{ $incoming->supplier }}">
                     @error('supplier')
                         <div class="invalid-feedback">
@@ -64,7 +64,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="address">Alamat</label>
+                    <label for="address">Alamat<span class="text-danger">(*)</span></label>
                     <textarea class="form-control @error('address') is-invalid @enderror" id="address" name="address" cols="30" rows="5" required>{{ $incoming->address }}</textarea>
                     @error('address')
                         <div class="invalid-feedback">
@@ -73,7 +73,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="no_sj_supplier">No SJ Supplier</label>
+                    <label for="no_sj_supplier">No SJ Supplier<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control w-25 @error('no_sj_supplier') is-invalid @enderror" id="no_sj_supplier" name="no_sj_supplier" required value="{{ $incoming->no_sj_supplier }}">
                     @error('no_sj_supplier')
                         <div class="invalid-feedback">
@@ -82,7 +82,7 @@
                     @enderror
                     </div>
                     <div class="form-group">
-                    <label for="qty">Jumlah Supply</label>
+                    <label for="qty">Jumlah Supply<span class="text-danger">(*)</span></label>
                     <input type="number" class="form-control w-25 @error('qty') is-invalid @enderror" id="qty" name="qty" required value="{{ $incoming->qty }}">
                     @error('qty')
                         <div class="invalid-feedback">
@@ -99,6 +99,7 @@
                         </div>
                     @enderror
                     </div>
+                    <span class="text-danger">(*)</span> Kolom wajib di isi
                     <div class="mt-3">
                     <a href="{{route('dashboardWarehouse')}}" class="btn btn-primary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan</button>

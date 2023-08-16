@@ -27,7 +27,7 @@
                                     <form action="{{ route('storeSupply') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <label for="supply_code">Kode Supply</label>
+                                            <label for="supply_code">Kode Supply<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-25 @error('supply_code') is-invalid @enderror"
                                                 id="supply_code" name="supply_code" required
@@ -39,7 +39,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="name">Nama Supply</label>
+                                            <label for="name">Nama Supply<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-50 @error('name') is-invalid @enderror" id="name"
                                                 name="name" required value="{{ old('name') }}">
@@ -50,21 +50,21 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="type">Tipe</label>
+                                            <label for="type">Tipe<span class="text-danger">(*)</span></label>
                                             <select name="type" id="type" class="form-control w-25">
                                                 <option value="FG">Finishing Good</option>
                                                 <option value="WO">Work Order</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="category">Kategori</label>
+                                            <label for="category">Kategori<span class="text-danger">(*)</span></label>
                                             <select name="category" id="category" class="form-control w-25">
                                                 <option value="Mentah">Mentah</option>
                                                 <option value="Jadi"> Jadi</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="warehouse">Warehouse</label>
+                                            <label for="warehouse">Warehouse<span class="text-danger">(*)</span></label>
                                             <select name="warehouse_id" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouses as $warehouse)
                                                     <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
@@ -72,7 +72,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="merk">Merk</label>
+                                            <label for="merk">Merk<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-25 @error('merk') is-invalid @enderror" id="merk"
                                                 name="merk" required value="{{ old('merk') }}">
@@ -93,7 +93,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="part_number">Part Number</label>
+                                            <label for="part_number">Part Number<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-25 @error('part_number') is-invalid @enderror"
                                                 id="part_number" name="part_number" required
@@ -105,7 +105,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty">Jumlah Supply</label>
+                                            <label for="qty">Jumlah Supply<span class="text-danger">(*)</span></label>
                                             <input type="number"
                                                 class="int-valid form-control w-25 @error('qty') is-invalid @enderror" id="qty"
                                                 name="qty" required value="{{ old('qty') }}">
@@ -116,14 +116,14 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="status">Status</label>
+                                            <label for="status">Status<span class="text-danger">(*)</span></label>
                                             <select name="status" id="status" class="form-control w-25 mb-4">
                                                 <option value="Active">Active</option>
                                                 <option value="Not Activer">Not Active</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="purchase_price">Harga Beli</label>
+                                            <label for="purchase_price">Harga Beli<span class="text-danger">(*)</span></label>
                                             <input type="number" name="purchase_price" id="purchase_price"
                                                 class="int-valid form-control w-25 @error('purchase_price') is-invalid @enderror"
                                                 required value="{{ old('purchase_price') }}">
@@ -134,7 +134,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="selling_price">Harga Jual</label>
+                                            <label for="selling_price">Harga Jual<span class="text-danger">(*)</span></label>
                                             <input type="number" name="selling_price" id="selling_price"
                                                 class="int-valid form-control w-25 @error('selling_price') is-invalid @enderror"
                                                 required value="{{ old('selling_price') }}">
@@ -144,6 +144,7 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <span class="text-danger">(*)</span> Kolom wajib di isi
                                         <div class="mt-3">
                                             <a href="{{ route('supplyDashboard') }}" class="btn btn-primary">Kembali</a>
                                             <button type="submit" class="btn btn-success">Simpan</button>

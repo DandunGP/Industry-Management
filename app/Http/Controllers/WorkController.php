@@ -221,6 +221,7 @@ class WorkController extends Controller
                 array_push($amounts, $amount);
                 $amount = 0;
             }
+            dd($amounts);
             $title = 'Laporan Work';
             $date = date('j F Y', strtotime($request->tanggal1));
             $date2 = date('j F Y', strtotime($request->tanggal2));
@@ -237,6 +238,7 @@ class WorkController extends Controller
                 array_push($amounts, $amount);
                 $amount = 0;
             }
+            dd($amounts);
             $title = 'Laporan Work';
             $date = date('j F Y', strtotime($request->tanggal1));
             $date2 = date('j F Y', strtotime($dateNow));

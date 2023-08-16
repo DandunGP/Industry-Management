@@ -27,7 +27,7 @@
                                     <form action="{{ route('updateWork', $work->id) }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <label for="no_wo">No WO</label>
+                                            <label for="no_wo">No WO<span class="text-danger">(*)</span></label>
                                             <input type="text"
                                                 class="form-control w-25 @error('no_wo') is-invalid @enderror"
                                                 id="no_wo" name="no_wo" required value="{{ $work->no_wo }}" readonly>
@@ -48,7 +48,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="plan_warehouse">Gudang Rencana</label>
+                                            <label for="plan_warehouse">Gudang Rencana<span class="text-danger">(*)</span></label>
                                             <select name="plan_warehouse" id="warehouse" class="form-control w-25">
                                                 @foreach ($warehouse as $wh)
                                                     @if ($wh->id == $work->plan_warehouse)
@@ -62,7 +62,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="qty_result">Hasil Qty</label>
+                                            <label for="qty_result">Hasil Qty<span class="text-danger">(*)</span></label>
                                             <input type="number" name="qty_result" id="qty_result"
                                                 class="int-valid form-control w-25 @error('qty_result') is-invalid @enderror" required
                                                 value="{{ $work->qty_result }}">

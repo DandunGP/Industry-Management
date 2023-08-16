@@ -28,7 +28,7 @@
                 <form  action="{{route('storeWarehouse')}}" method="POST">
                     @csrf
                     <div class="form-group">
-                    <label for="name">Nama Gudang</label>
+                    <label for="name">Nama Gudang<span class="text-danger">(*)</span></label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required value="{{ old('name') }}">
                     @error('name')
                         <div class="invalid-feedback">
@@ -40,6 +40,11 @@
                     <label for="information">Informasi</label>
                     <textarea name="information" class="form-control" id="information" cols="30" rows="10"></textarea>
                     </div>
+                    {{-- <div class="form-group">
+                        <label for="information">Kapasitas</label>
+                        <input name="information" class="form-control" id="information" cols="30" rows="10">
+                    </div> --}}
+                    <span class="text-danger">(*)</span> Kolom wajib di isi
                     <div class="mt-3">
                     <a href="{{route('dashboardWarehouse')}}" class="btn btn-primary">Kembali</a>
                     <button type="submit" class="btn btn-success">Simpan</button>
